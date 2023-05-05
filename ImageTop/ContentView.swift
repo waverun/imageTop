@@ -1,23 +1,62 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var showImage = false
+    @State private var imageName: String?
     @State private var timer: Timer? = nil
-    @State private var inactivityDuration: TimeInterval = 5 // Set your predefined time (in seconds)
+    @State private var inactivityDuration: TimeInterval = 1 // Set your predefined time (in seconds)
+    @State private var imageNames: [String] = []
+    @State private var imageFolder: String?
+
+    private func loadRandomImage() {
+        if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
+            imageName = "\(imageFolder)/\(randomImageName)"
+        }
+    }
 
     private func resetTimer() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
             DispatchQueue.main.async {
-                self.showImage = true
+                self.loadRandomImage()
+            }
+        }
+    }
+
+    private func requestFolderAccess() {
+        let openPanel = NSOpenPanel()
+        openPanel.title = "Select the Downloads folder"
+        openPanel.message = "Please select the Downloads folder to grant access."
+        openPanel.allowedFileTypes = ["none"]
+        openPanel.allowsOtherFileTypes = false
+        openPanel.canChooseFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.begin { response in
+            if response == .OK, let url = openPanel.url {
+                imageFolder = url.path
+                loadImageNames()
+            }
+        }
+    }
+
+    private func loadImageNames() {
+        if let imageFolder = imageFolder {
+            let folderURL = URL(fileURLWithPath: imageFolder)
+            let fileManager = FileManager.default
+            do {
+                let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+                imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
+                loadRandomImage()
+            } catch {
+                print("Error loading image names: \(error)")
             }
         }
     }
 
     var body: some View {
         ZStack {
-            if showImage {
-                Image("cockpit") // Replace with your image name
+            if let imageName = imageName {
+                Image(nsImage: NSImage(contentsOfFile: imageName)!)
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
@@ -25,12 +64,13 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
+            requestFolderAccess()
             resetTimer()
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
-                if self.showImage {
-                    self.showImage = false
+                if imageName != nil {
+                    imageName = nil
                 }
-                self.resetTimer()
+                resetTimer()
                 return event
             }
         }
@@ -39,6 +79,109 @@ struct ContentView: View {
         }
     }
 }
+
+//import SwiftUI
+//
+//struct ContentView: View {
+//    @State private var imageName: String?
+//    @State private var timer: Timer? = nil
+//    @State private var inactivityDuration: TimeInterval = 1 // Set your predefined time (in seconds)
+//    @State private var imageNames: [String] = []
+//
+//    let imageFolder = "/Users/shy/Downloads"
+//
+//    private func loadRandomImage() {
+//        if let randomImageName = imageNames.randomElement() {
+//            imageName = randomImageName
+//        }
+//    }
+//
+//    private func resetTimer() {
+//        timer?.invalidate()
+//        timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
+//            DispatchQueue.main.async {
+//                self.loadRandomImage()
+//            }
+//        }
+//    }
+//
+//    var body: some View {
+//        ZStack {
+//            if let imageName = imageName {
+//                Image(nsImage: NSImage(contentsOfFile: "\(imageFolder)/\(imageName)")!)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .edgesIgnoringSafeArea(.all)
+//            }
+//        }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .onAppear {
+//            let folderURL = URL(fileURLWithPath: imageFolder) // Use imageFolder as the full path
+//            let fileManager = FileManager.default
+//            do {
+//                let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+//                imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
+//                loadRandomImage()
+//            } catch {
+//                print("Error loading image names: \(error)")
+//            }
+//
+//            resetTimer()
+//            NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
+//                if imageName != nil {
+//                    imageName = nil
+//                }
+//                resetTimer()
+//                return event
+//            }
+//        }
+//        .onDisappear {
+//            timer?.invalidate()
+//        }
+//    }
+//}
+
+//import SwiftUI
+//
+//struct ContentView: View {
+//    @State private var showImage = false
+//    @State private var timer: Timer? = nil
+//    @State private var inactivityDuration: TimeInterval = 5 // Set your predefined time (in seconds)
+//
+//    private func resetTimer() {
+//        timer?.invalidate()
+//        timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
+//            DispatchQueue.main.async {
+//                self.showImage = true
+//            }
+//        }
+//    }
+//
+//    var body: some View {
+//        ZStack {
+//            if showImage {
+//                Image("cockpit") // Replace with your image name
+//                    .resizable()
+//                    .scaledToFill()
+//                    .edgesIgnoringSafeArea(.all)
+//            }
+//        }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .onAppear {
+//            resetTimer()
+//            NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
+//                if self.showImage {
+//                    self.showImage = false
+//                }
+//                self.resetTimer()
+//                return event
+//            }
+//        }
+//        .onDisappear {
+//            timer?.invalidate()
+//        }
+//    }
+//}
 
 //import SwiftUI
 //
