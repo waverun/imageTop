@@ -3,7 +3,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var showImage = false
     @State private var timer: Timer? = nil
-    @State private var inactivityDuration: TimeInterval = 1 // Set your predefined time (in seconds)
+    @State private var inactivityDuration: TimeInterval = 5 // Set your predefined time (in seconds)
 
     private func resetTimer() {
         timer?.invalidate()
@@ -29,8 +29,8 @@ struct ContentView: View {
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 if self.showImage {
                     self.showImage = false
-                    self.resetTimer()
                 }
+                self.resetTimer()
                 return event
             }
         }
@@ -39,6 +39,48 @@ struct ContentView: View {
         }
     }
 }
+
+//import SwiftUI
+//
+//struct ContentView: View {
+//    @State private var showImage = false
+//    @State private var timer: Timer? = nil
+//    @State private var inactivityDuration: TimeInterval = 1 // Set your predefined time (in seconds)
+//
+//    private func resetTimer() {
+//        timer?.invalidate()
+//        timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
+//            DispatchQueue.main.async {
+//                self.showImage = true
+//            }
+//        }
+//    }
+//
+//    var body: some View {
+//        ZStack {
+//            if showImage {
+//                Image("cockpit") // Replace with your image name
+//                    .resizable()
+//                    .scaledToFill()
+//                    .edgesIgnoringSafeArea(.all)
+//            }
+//        }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .onAppear {
+//            resetTimer()
+//            NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
+//                if self.showImage {
+//                    self.showImage = false
+//                    self.resetTimer()
+//                }
+//                return event
+//            }
+//        }
+//        .onDisappear {
+//            timer?.invalidate()
+//        }
+//    }
+//}
 
 ////
 ////  ContentView.swift
