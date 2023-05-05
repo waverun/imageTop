@@ -21,23 +21,67 @@ struct ContentView: View {
             }
         }
     }
-
+    
     private func requestFolderAccess() {
-        let openPanel = NSOpenPanel()
-        openPanel.title = "Select the Downloads folder"
-        openPanel.message = "Please select the Downloads folder to grant access."
-        openPanel.allowedFileTypes = ["none"]
-        openPanel.allowsOtherFileTypes = false
-        openPanel.canChooseFiles = false
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = false
-        openPanel.begin { response in
-            if response == .OK, let url = openPanel.url {
-                imageFolder = url.path
-                loadImageNames()
+            let openPanel = NSOpenPanel()
+            openPanel.title = "Select the Downloads folder"
+            openPanel.message = "Please select the Downloads folder to grant access."
+            openPanel.allowedFileTypes = ["none"]
+            openPanel.allowsOtherFileTypes = false
+            openPanel.canChooseFiles = false
+            openPanel.canChooseDirectories = true
+            openPanel.canCreateDirectories = false
+            openPanel.begin { response in
+                if response == .OK, let url = openPanel.url {
+                    do {
+                        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+                        UserDefaults.standard.set(bookmarkData, forKey: "DownloadsFolderBookmark")
+                        startAccessingDownloadsFolder()
+                    } catch {
+                        print("Error creating security-scoped bookmark: \(error)")
+                    }
+                }
             }
         }
-    }
+
+    private func startAccessingDownloadsFolder() {
+            if let bookmarkData = UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") {
+                do {
+                    var isStale = false
+                    let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
+                    if isStale {
+                        print("Bookmark data is stale")
+                    } else {
+                        if url.startAccessingSecurityScopedResource() {
+                            imageFolder = url.path
+                            loadImageNames()
+                        } else {
+                            print("Error accessing security-scoped resource")
+                        }
+                    }
+                } catch {
+                    print("Error resolving security-scoped bookmark: \(error)")
+                }
+            }
+        }
+
+//    private func requestFolderAccess() {
+//        let openPanel = NSOpenPanel()
+//        openPanel.title = "Select the Downloads folder"
+//        openPanel.message = "Please select the Downloads folder to grant access."
+//        openPanel.allowedFileTypes = ["none"]
+//        openPanel.allowsOtherFileTypes = false
+//        openPanel.canChooseFiles = false
+//        openPanel.canChooseDirectories = true
+//        openPanel.canCreateDirectories = false
+//        openPanel.begin { response in
+//            if response == .OK, let url = openPanel.url {
+//                UserDefaults.standard.set(url, forKey: "DownloadsFolderURL")
+//                imageFolder = url.path
+//                loadImageNames()
+//            }
+//        }
+//    }
 
     private func loadImageNames() {
         if let imageFolder = imageFolder {
@@ -64,7 +108,17 @@ struct ContentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            requestFolderAccess()
+            if UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") != nil {
+                startAccessingDownloadsFolder()
+            } else {
+                requestFolderAccess()
+            }
+            //            if let url = UserDefaults.standard.url(forKey: "DownloadsFolderURL") {
+//                imageFolder = url.path
+//                loadImageNames()
+//            } else {
+//                requestFolderAccess()
+//            }
             resetTimer()
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 if imageName != nil {
@@ -76,9 +130,95 @@ struct ContentView: View {
         }
         .onDisappear {
             timer?.invalidate()
+            if let url = URL(string: imageFolder ?? "") {
+                url.stopAccessingSecurityScopedResource()
+            }
+            
         }
     }
 }
+
+//import SwiftUI
+//
+//struct ContentView: View {
+//    @State private var imageName: String?
+//    @State private var timer: Timer? = nil
+//    @State private var inactivityDuration: TimeInterval = 1 // Set your predefined time (in seconds)
+//    @State private var imageNames: [String] = []
+//    @State private var imageFolder: String?
+//
+//    private func loadRandomImage() {
+//        if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
+//            imageName = "\(imageFolder)/\(randomImageName)"
+//        }
+//    }
+//
+//    private func resetTimer() {
+//        timer?.invalidate()
+//        timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
+//            DispatchQueue.main.async {
+//                self.loadRandomImage()
+//            }
+//        }
+//    }
+//
+//    private func requestFolderAccess() {
+//        let openPanel = NSOpenPanel()
+//        openPanel.title = "Select the Downloads folder"
+//        openPanel.message = "Please select the Downloads folder to grant access."
+//        openPanel.allowedFileTypes = ["none"]
+//        openPanel.allowsOtherFileTypes = false
+//        openPanel.canChooseFiles = false
+//        openPanel.canChooseDirectories = true
+//        openPanel.canCreateDirectories = false
+//        openPanel.begin { response in
+//            if response == .OK, let url = openPanel.url {
+//                imageFolder = url.path
+//                loadImageNames()
+//            }
+//        }
+//    }
+//
+//    private func loadImageNames() {
+//        if let imageFolder = imageFolder {
+//            let folderURL = URL(fileURLWithPath: imageFolder)
+//            let fileManager = FileManager.default
+//            do {
+//                let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+//                imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
+//                loadRandomImage()
+//            } catch {
+//                print("Error loading image names: \(error)")
+//            }
+//        }
+//    }
+//
+//    var body: some View {
+//        ZStack {
+//            if let imageName = imageName {
+//                Image(nsImage: NSImage(contentsOfFile: imageName)!)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .edgesIgnoringSafeArea(.all)
+//            }
+//        }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .onAppear {
+//            requestFolderAccess()
+//            resetTimer()
+//            NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
+//                if imageName != nil {
+//                    imageName = nil
+//                }
+//                resetTimer()
+//                return event
+//            }
+//        }
+//        .onDisappear {
+//            timer?.invalidate()
+//        }
+//    }
+//}
 
 //import SwiftUI
 //
