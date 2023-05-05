@@ -7,6 +7,13 @@ struct ContentView: View {
     @State private var inactivityDuration: TimeInterval = 1 // Set your predefined time (in seconds)
     @State private var imageNames: [String] = []
     @State private var imageFolder: String?
+    @State private var imageChangeTimer: Timer? = nil
+
+    private func setupImageChangeTimer() {
+        imageChangeTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [self] _ in
+            self.loadRandomImage()
+        }
+    }
 
     private func loadRandomImage() {
         if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
@@ -45,28 +52,6 @@ struct ContentView: View {
         }
     }
 
-//    private func requestFolderAccess() {
-//            let openPanel = NSOpenPanel()
-//            openPanel.title = "Select the Downloads folder"
-//            openPanel.message = "Please select the Downloads folder to grant access."
-//            openPanel.allowedFileTypes = ["none"]
-//            openPanel.allowsOtherFileTypes = false
-//            openPanel.canChooseFiles = false
-//            openPanel.canChooseDirectories = true
-//            openPanel.canCreateDirectories = false
-//            openPanel.begin { response in
-//                if response == .OK, let url = openPanel.url {
-//                    do {
-//                        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
-//                        UserDefaults.standard.set(bookmarkData, forKey: "DownloadsFolderBookmark")
-//                        startAccessingDownloadsFolder()
-//                    } catch {
-//                        print("Error creating security-scoped bookmark: \(error)")
-//                    }
-//                }
-//            }
-//        }
-
     private func startAccessingDownloadsFolder() {
             if let bookmarkData = UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") {
                 do {
@@ -87,24 +72,6 @@ struct ContentView: View {
                 }
             }
         }
-
-//    private func requestFolderAccess() {
-//        let openPanel = NSOpenPanel()
-//        openPanel.title = "Select the Downloads folder"
-//        openPanel.message = "Please select the Downloads folder to grant access."
-//        openPanel.allowedFileTypes = ["none"]
-//        openPanel.allowsOtherFileTypes = false
-//        openPanel.canChooseFiles = false
-//        openPanel.canChooseDirectories = true
-//        openPanel.canCreateDirectories = false
-//        openPanel.begin { response in
-//            if response == .OK, let url = openPanel.url {
-//                UserDefaults.standard.set(url, forKey: "DownloadsFolderURL")
-//                imageFolder = url.path
-//                loadImageNames()
-//            }
-//        }
-//    }
 
     private func loadImageNames() {
         if let imageFolder = imageFolder {
@@ -136,13 +103,8 @@ struct ContentView: View {
             } else {
                 requestFolderAccess()
             }
-            //            if let url = UserDefaults.standard.url(forKey: "DownloadsFolderURL") {
-//                imageFolder = url.path
-//                loadImageNames()
-//            } else {
-//                requestFolderAccess()
-//            }
             resetTimer()
+            setupImageChangeTimer()
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 if imageName != nil {
                     imageName = nil
@@ -153,6 +115,7 @@ struct ContentView: View {
         }
         .onDisappear {
             timer?.invalidate()
+            imageChangeTimer?.invalidate()
             if let url = URL(string: imageFolder ?? "") {
                 url.stopAccessingSecurityScopedResource()
             }
