@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @State private var imageName: String?
@@ -23,26 +24,48 @@ struct ContentView: View {
     }
     
     private func requestFolderAccess() {
-            let openPanel = NSOpenPanel()
-            openPanel.title = "Select the Downloads folder"
-            openPanel.message = "Please select the Downloads folder to grant access."
-            openPanel.allowedFileTypes = ["none"]
-            openPanel.allowsOtherFileTypes = false
-            openPanel.canChooseFiles = false
-            openPanel.canChooseDirectories = true
-            openPanel.canCreateDirectories = false
-            openPanel.begin { response in
-                if response == .OK, let url = openPanel.url {
-                    do {
-                        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
-                        UserDefaults.standard.set(bookmarkData, forKey: "DownloadsFolderBookmark")
-                        startAccessingDownloadsFolder()
-                    } catch {
-                        print("Error creating security-scoped bookmark: \(error)")
-                    }
+        let openPanel = NSOpenPanel()
+        openPanel.title = "Select the Downloads folder"
+        openPanel.message = "Please select the Downloads folder to grant access."
+        openPanel.allowedContentTypes = [UTType.folder]
+        openPanel.allowsOtherFileTypes = false
+        openPanel.canChooseFiles = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.begin { response in
+            if response == .OK, let url = openPanel.url {
+                do {
+                    let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+                    UserDefaults.standard.set(bookmarkData, forKey: "DownloadsFolderBookmark")
+                    startAccessingDownloadsFolder()
+                } catch {
+                    print("Error creating security-scoped bookmark: \(error)")
                 }
             }
         }
+    }
+
+//    private func requestFolderAccess() {
+//            let openPanel = NSOpenPanel()
+//            openPanel.title = "Select the Downloads folder"
+//            openPanel.message = "Please select the Downloads folder to grant access."
+//            openPanel.allowedFileTypes = ["none"]
+//            openPanel.allowsOtherFileTypes = false
+//            openPanel.canChooseFiles = false
+//            openPanel.canChooseDirectories = true
+//            openPanel.canCreateDirectories = false
+//            openPanel.begin { response in
+//                if response == .OK, let url = openPanel.url {
+//                    do {
+//                        let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+//                        UserDefaults.standard.set(bookmarkData, forKey: "DownloadsFolderBookmark")
+//                        startAccessingDownloadsFolder()
+//                    } catch {
+//                        print("Error creating security-scoped bookmark: \(error)")
+//                    }
+//                }
+//            }
+//        }
 
     private func startAccessingDownloadsFolder() {
             if let bookmarkData = UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") {
