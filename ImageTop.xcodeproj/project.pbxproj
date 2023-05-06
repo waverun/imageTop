@@ -13,6 +13,7 @@
 		923643A02A0521B600221E30 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9236439F2A0521B600221E30 /* Preview Assets.xcassets */; };
 		923643A22A0521B600221E30 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923643A12A0521B600221E30 /* Persistence.swift */; };
 		923643A52A0521B600221E30 /* ImageTop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923643A32A0521B600221E30 /* ImageTop.xcdatamodeld */; };
+		92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		923643A42A0521B600221E30 /* ImageTop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ImageTop.xcdatamodel; sourceTree = "<group>"; };
 		923643A62A0521B600221E30 /* ImageTop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageTop.entitlements; sourceTree = "<group>"; };
 		92DDFA6C2A05415100056912 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalWatchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 			children = (
 				92DDFA6C2A05415100056912 /* Info.plist */,
 				923643982A0521B400221E30 /* ImageTopApp.swift */,
+				92DDFA6D2A06DF2E00056912 /* Views */,
 				9236439A2A0521B400221E30 /* ContentView.swift */,
 				9236439C2A0521B600221E30 /* Assets.xcassets */,
 				923643A12A0521B600221E30 /* Persistence.swift */,
@@ -75,6 +78,14 @@
 				9236439F2A0521B600221E30 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		92DDFA6D2A06DF2E00056912 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +158,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */,
 				923643A22A0521B600221E30 /* Persistence.swift in Sources */,
 				9236439B2A0521B400221E30 /* ContentView.swift in Sources */,
 				923643992A0521B400221E30 /* ImageTopApp.swift in Sources */,
