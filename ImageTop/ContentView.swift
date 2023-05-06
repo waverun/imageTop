@@ -13,13 +13,18 @@ struct ContentView: View {
 
     private func randomGentleColor() -> Color {
         let colors: [Color] = [
-            Color(red: 0.95, green: 0.95, blue: 0.97),
-            Color(red: 0.92, green: 0.97, blue: 0.95),
-            Color(red: 0.97, green: 0.95, blue: 0.93),
-            Color(red: 0.95, green: 0.93, blue: 0.97),
-            Color(red: 0.93, green: 0.97, blue: 0.97),
-            Color(red: 0.97, green: 0.97, blue: 0.95),
-            Color(red: 0.97, green: 0.93, blue: 0.93)
+            Color(red: 0.96, green: 0.52, blue: 0.49),
+            Color(red: 0.96, green: 0.81, blue: 0.48),
+            Color(red: 0.53, green: 0.84, blue: 0.71),
+            Color(red: 0.48, green: 0.57, blue: 0.87),
+            Color(red: 0.74, green: 0.54, blue: 0.86),
+            Color(red: 0.91, green: 0.46, blue: 0.85),
+            Color(red: 0.98, green: 0.63, blue: 0.45),
+            Color(red: 0.98, green: 0.84, blue: 0.45),
+            Color(red: 0.84, green: 0.98, blue: 0.45),
+            Color(red: 0.45, green: 0.98, blue: 0.83),
+            Color(red: 0.45, green: 0.74, blue: 0.98),
+            Color(red: 0.78, green: 0.45, blue: 0.98)
         ]
 
         return colors.randomElement() ?? Color.white
