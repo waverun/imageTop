@@ -8,13 +8,43 @@ struct ContentView: View {
     @State private var imageNames: [String] = []
     @State private var imageFolder: String?
     @State private var imageChangeTimer: Timer? = nil
+    @State private var backgroundColor: Color = Color.white
+    @State private var imageMode = true
 
-    private func setupImageChangeTimer() {
+    private func randomGentleColor() -> Color {
+        let colors: [Color] = [
+            Color(red: 0.95, green: 0.95, blue: 0.97),
+            Color(red: 0.92, green: 0.97, blue: 0.95),
+            Color(red: 0.97, green: 0.95, blue: 0.93),
+            Color(red: 0.95, green: 0.93, blue: 0.97),
+            Color(red: 0.93, green: 0.97, blue: 0.97),
+            Color(red: 0.97, green: 0.97, blue: 0.95),
+            Color(red: 0.97, green: 0.93, blue: 0.93)
+        ]
+
+        return colors.randomElement() ?? Color.white
+    }
+
+    private func changeBackgroundColor() {
+        imageName = nil
+        backgroundColor = randomGentleColor()
+    }
+
+    private func setupScreenChangeTimer() {
         imageChangeTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [self] _ in
-            self.loadRandomImage()
+            changeScreenImageOrColor()
+//            if self.imageNames.count < 100 {
+//                self.changeBackgroundColor()
+//            } else {
+//                self.loadRandomImage()
+//            }
         }
     }
 
+    private func changeScreenImageOrColor() {
+        _ = imageMode ? loadRandomImage() : changeBackgroundColor()
+    }
+    
     private func loadRandomImage() {
         if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
             imageName = "\(imageFolder)/\(randomImageName)"
@@ -25,7 +55,8 @@ struct ContentView: View {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
             DispatchQueue.main.async {
-                self.loadRandomImage()
+//                self.loadRandomImage()
+                changeScreenImageOrColor()
             }
         }
     }
@@ -53,25 +84,25 @@ struct ContentView: View {
     }
 
     private func startAccessingDownloadsFolder() {
-            if let bookmarkData = UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") {
-                do {
-                    var isStale = false
-                    let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
-                    if isStale {
-                        print("Bookmark data is stale")
+        if let bookmarkData = UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") {
+            do {
+                var isStale = false
+                let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
+                if isStale {
+                    print("Bookmark data is stale")
+                } else {
+                    if url.startAccessingSecurityScopedResource() {
+                        imageFolder = url.path
+                        loadImageNames()
                     } else {
-                        if url.startAccessingSecurityScopedResource() {
-                            imageFolder = url.path
-                            loadImageNames()
-                        } else {
-                            print("Error accessing security-scoped resource")
-                        }
+                        print("Error accessing security-scoped resource")
                     }
-                } catch {
-                    print("Error resolving security-scoped bookmark: \(error)")
                 }
+            } catch {
+                print("Error resolving security-scoped bookmark: \(error)")
             }
         }
+    }
 
     private func loadImageNames() {
         if let imageFolder = imageFolder {
@@ -80,7 +111,9 @@ struct ContentView: View {
             do {
                 let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
                 imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
-                loadRandomImage()
+                imageMode = imageNames.count >= 2
+//                loadRandomImage()
+                changeScreenImageOrColor()
             } catch {
                 print("Error loading image names: \(error)")
             }
@@ -89,6 +122,7 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
+            backgroundColor.edgesIgnoringSafeArea(.all)
             if let imageName = imageName {
                 Image(nsImage: NSImage(contentsOfFile: imageName)!)
                     .resizable()
@@ -104,7 +138,7 @@ struct ContentView: View {
                 requestFolderAccess()
             }
             resetTimer()
-            setupImageChangeTimer()
+            setupScreenChangeTimer()
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 if imageName != nil {
                     imageName = nil
@@ -123,6 +157,12 @@ struct ContentView: View {
         }
     }
 }
+
+//    private func setupImageChangeTimer() {
+//        imageChangeTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [self] _ in
+//            self.loadRandomImage()
+//        }
+//    }
 
 //import SwiftUI
 //
