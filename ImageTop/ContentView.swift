@@ -8,10 +8,12 @@ struct ContentView: View {
     @State private var inactivityDuration: TimeInterval = 10 // Set your predefined time (in seconds)
     @State private var imageNames: [String] = []
     @State private var imageFolder: String?
-    @State private var imageChangeTimer: Timer? = nil
+    @State private var imageOrBackgroundChangeTimer: Timer? = nil
     @State private var backgroundColor: Color = Color.white
     @State private var imageMode = true
-
+    @State private var fadeColor: Color = Color.clear
+    @State private var showFadeColor: Bool = false
+    
     private func randomGentleColor() -> Color {
         let colors: [Color] = [
             Color(red: 0.96, green: 0.52, blue: 0.49),
@@ -27,21 +29,24 @@ struct ContentView: View {
             Color(red: 0.45, green: 0.74, blue: 0.98),
             Color(red: 0.78, green: 0.45, blue: 0.98)
         ]
-
+        
         return colors.randomElement() ?? Color.white
     }
-
+    
     private func changeBackgroundColor() {
         imageName = nil
-        backgroundColor = randomGentleColor()
+        let newColor = randomGentleColor()
+        fadeColor = newColor
+        
+        showFadeColor = true
     }
-
+        
     private func setupScreenChangeTimer() {
-        imageChangeTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [self] _ in
+        imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [self] _ in
             changeScreenImageOrColor()
         }
     }
-
+    
     private func changeScreenImageOrColor() {
         _ = imageMode ? loadRandomImage() : changeBackgroundColor()
     }
@@ -52,12 +57,12 @@ struct ContentView: View {
             imageName = "\(imageFolder)/\(randomImageName)"
         }
     }
-
+    
     private func resetTimer() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
             DispatchQueue.main.async {
-//                self.loadRandomImage()
+                //                self.loadRandomImage()
                 changeScreenImageOrColor()
             }
         }
@@ -66,7 +71,7 @@ struct ContentView: View {
     private func exitApp() {
         NSApplication.shared.terminate(self)
     }
-
+    
     private func requestFolderAccess() {
         let openPanel = NSOpenPanel()
         openPanel.title = "Select the Downloads folder"
@@ -88,7 +93,7 @@ struct ContentView: View {
             }
         }
     }
-
+    
     private func startAccessingDownloadsFolder() {
         if let bookmarkData = UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") {
             do {
@@ -109,7 +114,7 @@ struct ContentView: View {
             }
         }
     }
-
+    
     private func loadImageNames() {
         if let imageFolder = imageFolder {
             let folderURL = URL(fileURLWithPath: imageFolder)
@@ -124,10 +129,19 @@ struct ContentView: View {
             }
         }
     }
-
+    
     var body: some View {
         ZStack {
-            backgroundColor.edgesIgnoringSafeArea(.all)
+            backgroundColor
+                .opacity(showFadeColor ? 0 : 1)
+                .edgesIgnoringSafeArea(.all)
+                .animation(.linear(duration: 1))
+            
+            fadeColor
+                .opacity(showFadeColor ? 1 : 0)
+                .edgesIgnoringSafeArea(.all)
+                .animation(.linear(duration: 1))
+            
             if let imageName = imageName {
                 Image(nsImage: NSImage(contentsOfFile: imageName)!)
                     .resizable()
@@ -136,7 +150,14 @@ struct ContentView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onChange(of: showFadeColor) { _ in
+            withAnimation(.linear(duration: 1)) {
+                backgroundColor = backgroundColor
+                fadeColor = fadeColor
+            }
+        }
         .onAppear {
+            
             if UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") != nil {
                 startAccessingDownloadsFolder()
             } else {
@@ -147,16 +168,16 @@ struct ContentView: View {
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 exitApp()
                 return event
-//                if imageName != nil {
-//                    imageName = nil
-//                }
-//                resetTimer()
-//                return event
+                //                if imageName != nil {
+                //                    imageName = nil
+                //                }
+                //                resetTimer()
+                //                return event
             }
         }
         .onDisappear {
             timer?.invalidate()
-            imageChangeTimer?.invalidate()
+            imageOrBackgroundChangeTimer?.invalidate()
             if let url = URL(string: imageFolder ?? "") {
                 url.stopAccessingSecurityScopedResource()
             }
