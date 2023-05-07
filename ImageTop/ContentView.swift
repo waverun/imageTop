@@ -1,6 +1,18 @@
 import SwiftUI
 import UniformTypeIdentifiers
 import AppKit
+import GameplayKit
+
+private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
+    var seed = UInt64(Date().timeIntervalSince1970)
+    let seedData = Data(bytes: &seed, count: MemoryLayout<UInt64>.size)
+    let generator = GKARC4RandomSource(seed: seedData)
+
+    let x = CGFloat(generator.nextUniform()) * (parentSize.width * 0.8 - parentSize.width * 0.2) + parentSize.width * 0.2
+    let y = CGFloat(generator.nextUniform()) * (parentSize.height * 0.8 - parentSize.height * 0.2) + parentSize.height * 0.2
+    
+    return (x, y)
+}
 
 struct ContentView: View {
     @State private var imageName: String?
@@ -15,17 +27,43 @@ struct ContentView: View {
     @State private var showFadeColor: Bool = false
     @State private var secondImageName: String?
     @State private var showSecondImage: Bool = false
-    @State private var x: CGFloat?
-    @State private var y: CGFloat?
+//    @State private var x: CGFloat?
+//    @State private var y: CGFloat?
+    @State private var x: CGFloat = {
+        if let screenSize = NSScreen.main?.frame.size {
+            return calculateWatchPosition(parentSize: screenSize).0
+        }
+        return 0
+    }()
+
+    @State private var y: CGFloat = {
+        if let screenSize = NSScreen.main?.frame.size {
+            return calculateWatchPosition(parentSize: screenSize).1
+        }
+        return 0
+    }()
+
     
-    private func calculateWatchPosition(parentSize: CGSize) {
-        //        if x == 0 && y == 0 {
-        x = CGFloat.random(in: parentSize.width * 0.2 ..< parentSize.width * 0.8)
-        y = CGFloat.random(in: parentSize.height * 0.2 ..< parentSize.height * 0.8)
-        //                }
-        
+    init() {
+        if let screenSize = NSScreen.main?.frame.size {
+            let (xValue, yValue) = calculateWatchPosition(parentSize: screenSize)
+            _x = State(initialValue: xValue)
+            _y = State(initialValue: yValue)
+        }
     }
-    
+
+//    private func calculateWatchPosition(parentSize: CGSize) {
+//        var seed = UInt64(Date().timeIntervalSince1970)
+//        let seedData = Data(bytes: &seed, count: MemoryLayout<UInt64>.size)
+//        let generator = GKARC4RandomSource(seed: seedData)
+//
+//        x = CGFloat(generator.nextUniform()) * (parentSize.width * 0.8 - parentSize.width * 0.2) + parentSize.width * 0.2
+//        y = CGFloat(generator.nextUniform()) * (parentSize.height * 0.8 - parentSize.height * 0.2) + parentSize.height * 0.2
+//
+////        print("(x, y): (\(x), \(y))")
+////        watchPos)ition = CGPoint(x: x, y: y)
+//    }
+
     private func randomGentleColor() -> Color {
         let colors: [Color] = [
             Color(red: 0.96, green: 0.52, blue: 0.49),
@@ -188,10 +226,6 @@ struct ContentView: View {
             }
             resetTimer()
             setupScreenChangeTimer()
-            if let screenSize = NSScreen.main?.frame.size,
-               x == nil {
-                calculateWatchPosition(parentSize: screenSize)
-            }
             
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 exitApp()
