@@ -17,9 +17,13 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 struct ContentView: View {
     let onMainWindowHide: (() -> Void)?
 
+    @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
+    @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
+    @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
+
     @State private var imageName: String?
     @State private var timer: Timer? = nil
-    @State private var inactivityDuration: TimeInterval = 10 // Set your predefined time (in seconds)
+//    @State private var inactivityDuration: TimeInterval = 10 // Set your predefined time (in seconds)
     @State private var imageNames: [String] = []
     @State private var imageFolder: String?
     @State private var imageOrBackgroundChangeTimer: Timer? = nil
@@ -84,7 +88,7 @@ struct ContentView: View {
     }
         
     private func setupScreenChangeTimer() {
-        imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [self] _ in
+        imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: replaceImageAfter, repeats: true) { [self] _ in
             changeScreenImageOrColor()
         }
     }
@@ -114,11 +118,7 @@ struct ContentView: View {
         }
     }
     
-//    private func exitApp() {
-//        NSApplication.shared.terminate(self)
-//    }
-    
-    private func exitApp() {
+    private func hideApp() {
         onMainWindowHide?()
     }
 
@@ -222,7 +222,7 @@ struct ContentView: View {
             setupScreenChangeTimer()
             
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
-                exitApp()
+                hideApp()
                 return event
             }
         }

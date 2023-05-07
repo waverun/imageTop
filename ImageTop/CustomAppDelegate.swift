@@ -38,6 +38,7 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate {
         )
         settingsWindow.contentView = NSHostingView(rootView: SettingsView())
         settingsWindow.title = "Settings"
+        settingsWindow.level = .floating
         settingsWindow.center()
         
         // Maximize the main window
@@ -60,5 +61,12 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate {
     @objc func openSettings(sender: AnyObject) {
         settingsWindow.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+        settingsWindow.makeFirstResponder(nil)
     }
+
+//    @objc func openSettings(sender: AnyObject) {
+//        settingsWindow.makeKeyAndOrderFront(nil)
+//        NSApplication.shared.activate(ignoringOtherApps: true) // Add this lingf
+//        NSApp.activate(ignoringOtherApps: true)
+//    }
 }

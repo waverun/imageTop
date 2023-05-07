@@ -16,6 +16,7 @@
 		92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */; };
 		92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */; };
 		92DDFA772A07DC7800056912 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA762A07DC7800056912 /* SettingsView.swift */; };
+		92DDFA7D2A08346B00056912 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA7C2A08346B00056912 /* FocusableTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalWatchView.swift; sourceTree = "<group>"; };
 		92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppDelegate.swift; sourceTree = "<group>"; };
 		92DDFA762A07DC7800056912 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		92DDFA7C2A08346B00056912 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 		923643972A0521B400221E30 /* ImageTop */ = {
 			isa = PBXGroup;
 			children = (
+				92DDFA7B2A08344100056912 /* Structs */,
 				92DDFA782A07E23F00056912 /* Extensions */,
 				92DDFA6C2A05415100056912 /* Info.plist */,
 				923643982A0521B400221E30 /* ImageTopApp.swift */,
@@ -100,6 +103,14 @@
 			children = (
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		92DDFA7B2A08344100056912 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				92DDFA7C2A08346B00056912 /* FocusableTextField.swift */,
+			);
+			path = Structs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,6 +183,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92DDFA7D2A08346B00056912 /* FocusableTextField.swift in Sources */,
 				92DDFA772A07DC7800056912 /* SettingsView.swift in Sources */,
 				92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */,
 				923643A22A0521B600221E30 /* Persistence.swift in Sources */,
