@@ -15,7 +15,17 @@ struct ContentView: View {
     @State private var showFadeColor: Bool = false
     @State private var secondImageName: String?
     @State private var showSecondImage: Bool = false
-
+    @State private var x: CGFloat?
+    @State private var y: CGFloat?
+    
+    private func calculateWatchPosition(parentSize: CGSize) {
+        //        if x == 0 && y == 0 {
+        x = CGFloat.random(in: parentSize.width * 0.2 ..< parentSize.width * 0.8)
+        y = CGFloat.random(in: parentSize.height * 0.2 ..< parentSize.height * 0.8)
+        //                }
+        
+    }
+    
     private func randomGentleColor() -> Color {
         let colors: [Color] = [
             Color(red: 0.96, green: 0.52, blue: 0.49),
@@ -54,14 +64,7 @@ struct ContentView: View {
     private func changeScreenImageOrColor() {
         _ = imageMode ? loadRandomImage() : changeBackgroundColor()
     }
-    
-//    private func loadRandomImage() {
-//        print("loadRandomImage")
-//        if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
-//            imageName = "\(imageFolder)/\(randomImageName)"
-//        }
-//    }
-    
+        
     private func loadRandomImage() {
         print("loadRandomImage")
         if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
@@ -146,58 +149,37 @@ struct ContentView: View {
     }
     
     var body: some View {
-        ZStack {
-            backgroundColor
-//                .opacity(showFadeColor ? 0 : 1)
-                .edgesIgnoringSafeArea(.all)
-//                .animation(.linear(duration: 1))
-            
-            fadeColor
-                .opacity(showFadeColor ? 1 : 0)
-                .edgesIgnoringSafeArea(.all)
-//                .animation(.linear(duration: 1))
-            
-//            if let imageName = imageName {
-//                Image(nsImage: NSImage(contentsOfFile: imageName)!)
-//                    .resizable()
-//                    .scaledToFill()
-//                    .edgesIgnoringSafeArea(.all)
-//            }
-//            if let secondImageName = secondImageName {
-//                Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
-//                    .resizable()
-//                    .scaledToFill()
-//                    .edgesIgnoringSafeArea(.all)
-//            }
-            if let imageName = imageName {
-                Image(nsImage: NSImage(contentsOfFile: imageName)!)
-                    .resizable()
-                    .scaledToFill()
+        GeometryReader { geometry in
+            ZStack {
+                backgroundColor
                     .edgesIgnoringSafeArea(.all)
-                    .opacity(showSecondImage ? 0 : 1)
-                    .animation(.linear(duration: 1), value: showSecondImage)
-            }
-
-            if let secondImageName = secondImageName {
-                Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
-                    .resizable()
-                    .scaledToFill()
+                
+                fadeColor
+                    .opacity(showFadeColor ? 1 : 0)
                     .edgesIgnoringSafeArea(.all)
-                    .opacity(showSecondImage ? 1 : 0)
-                    .animation(.linear(duration: 1), value: showSecondImage)
+                
+                if let imageName = imageName {
+                    Image(nsImage: NSImage(contentsOfFile: imageName)!)
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                        .opacity(showSecondImage ? 0 : 1)
+                        .animation(.linear(duration: 1), value: showSecondImage)
+                }
+                
+                if let secondImageName = secondImageName {
+                    Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                        .opacity(showSecondImage ? 1 : 0)
+                        .animation(.linear(duration: 1), value: showSecondImage)
+                }
+                
+                DigitalWatchView(x: x, y: y)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onChange(of: showFadeColor) { newValue in
-            if newValue {
-                withAnimation(.linear(duration: 1)) {
-                    backgroundColor = fadeColor
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    showFadeColor = false
-                }
-            }
-        }
         .onAppear {
             if UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") != nil {
                 startAccessingDownloadsFolder()
@@ -206,6 +188,11 @@ struct ContentView: View {
             }
             resetTimer()
             setupScreenChangeTimer()
+            if let screenSize = NSScreen.main?.frame.size,
+               x == nil {
+                calculateWatchPosition(parentSize: screenSize)
+            }
+            
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 exitApp()
                 return event
@@ -217,7 +204,6 @@ struct ContentView: View {
             if let url = URL(string: imageFolder ?? "") {
                 url.stopAccessingSecurityScopedResource()
             }
-            
         }
     }
 }
