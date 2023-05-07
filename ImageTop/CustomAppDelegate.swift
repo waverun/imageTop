@@ -1,6 +1,8 @@
 import Cocoa
 import SwiftUI
 
+var gIgnoreHideCount = 0
+
 class CustomAppDelegate: NSObject, NSApplicationDelegate {
     var mainWindow: NSWindow?
     var statusBarItem: NSStatusItem!
@@ -47,6 +49,8 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate {
     @objc func showMainWindow() {
         mainWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+        gIgnoreHideCount = 2
+        print("d1: showMainWindow")
     }
     
     @objc func quitApp() {
