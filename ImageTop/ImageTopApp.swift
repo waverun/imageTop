@@ -8,11 +8,13 @@ struct ImageTopApp: App {
         @NSApplicationDelegateAdaptor(CustomAppDelegate.self) var appDelegate
 
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .background(WindowAccessor { window in
-                    appDelegate.mainWindow = window
-                })
+            ContentView(onMainWindowHide: {
+                appDelegate.mainWindow?.orderOut(nil)
+            })
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .background(WindowAccessor { window in
+                appDelegate.mainWindow = window
+            })
         }
     }
 }
@@ -33,18 +35,3 @@ struct WindowAccessor: NSViewRepresentable {
     func updateNSView(_ nsView: NSView, context: Context) {}
 }
 
-//import SwiftUI
-//
-//@main
-//struct ImageTopApp: App {
-//    let persistenceController = PersistenceController.shared
-//
-//    var body: some Scene {
-//        @NSApplicationDelegateAdaptor(CustomAppDelegate.self) var appDelegate
-//
-//        WindowGroup {
-//            ContentView()
-//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-//        }
-//    }
-//}

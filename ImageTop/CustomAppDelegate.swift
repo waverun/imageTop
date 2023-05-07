@@ -27,13 +27,6 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate {
         // Assign the menu to the status bar item
         statusBarItem.menu = menu
         
-        //        // Add status bar icon
-        //        statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        //        if let button = statusBarItem.button {
-        //            button.image = NSImage(systemSymbolName: "display.2", accessibilityDescription: "Settings")
-        //            button.action = #selector(statusBarButtonClicked)
-        //        }
-        
         // Initialize settings window
         settingsWindow = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 300, height: 200),
@@ -65,14 +58,3 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
     }
 }
-
-//import Cocoa
-//import SwiftUI
-//
-//class CustomAppDelegate: NSObject, NSApplicationDelegate {
-//    func applicationDidFinishLaunching(_ notification: Notification) {
-//        if let window = NSApplication.shared.windows.first {
-//            window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: true, animate: true)
-//        }
-//    }
-//}

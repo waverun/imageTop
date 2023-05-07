@@ -15,7 +15,7 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 }
 
 struct ContentView: View {
-//    @Environment(\.appDelegate) private var appDelegate: CustomAppDelegate
+    let onMainWindowHide: (() -> Void)?
 
     @State private var imageName: String?
     @State private var timer: Timer? = nil
@@ -44,7 +44,9 @@ struct ContentView: View {
     }()
 
     
-    init() {
+    init(onMainWindowHide: @escaping () -> Void = {}) {
+        self.onMainWindowHide = onMainWindowHide
+
         if let screenSize = NSScreen.main?.frame.size {
             let (xValue, yValue) = calculateWatchPosition(parentSize: screenSize)
             _x = State(initialValue: xValue)
@@ -112,10 +114,14 @@ struct ContentView: View {
         }
     }
     
-    private func exitApp() {
-        NSApplication.shared.terminate(self)
-    }
+//    private func exitApp() {
+//        NSApplication.shared.terminate(self)
+//    }
     
+    private func exitApp() {
+        onMainWindowHide?()
+    }
+
     private func requestFolderAccess() {
         let openPanel = NSOpenPanel()
         openPanel.title = "Select the Downloads folder"
@@ -216,13 +222,7 @@ struct ContentView: View {
             setupScreenChangeTimer()
             
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
-//                exitApp()
-//                NSApp.keyWindow?.orderOut(nil) // Hide the main window
-//                appDelegate.mainWindow?.orderOut(nil)
-                if let appDelegate = NSApplication.shared.delegate as? CustomAppDelegate {
-                    appDelegate.mainWindow?.orderOut(nil)
-                }
-
+                exitApp()
                 return event
             }
         }
