@@ -214,7 +214,8 @@ struct ContentView: View {
             setupScreenChangeTimer()
             
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
-                exitApp()
+//                exitApp()
+                NSApp.keyWindow?.orderOut(nil) // Hide the main window
                 return event
             }
         }
