@@ -16,7 +16,7 @@ struct SettingsView: View {
                     VStack {
                         HStack {
                             Text("Inactivity Duration")
-                                .frame(width: geometry.size.width * 0.5, alignment: .leading)
+                                .frame(width: geometry.size.width * 0.635, alignment: .leading)
                             TextField("", value: $inactivityDuration, formatter: NumberFormatter())
                                 .multilineTextAlignment(.trailing)
                                 .frame(width: 50)
@@ -24,15 +24,16 @@ struct SettingsView: View {
                         }.padding(.leading)
                         HStack {
                             Text("Replace Image After")
-                                .frame(width: geometry.size.width * 0.5, alignment: .leading)
+                                .frame(width: geometry.size.width * 0.635, alignment: .leading)
                             TextField("", value: $replaceImageAfter, formatter: NumberFormatter())
                                 .multilineTextAlignment(.trailing)
-                                .frame(width: 50)
+                                .frame(width: 50
+                                )
                             Spacer()
                         }.padding(.leading)
                         HStack {
                             Text("Image Folder")
-                                .frame(width: geometry.size.width * 0.5, alignment: .leading)
+                                .frame(width: geometry.size.width * 0.58, alignment: .leading)
                             Button("Select...") {
                                 openFolderPicker()
                             }
