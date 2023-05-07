@@ -27,8 +27,6 @@ struct ContentView: View {
     @State private var showFadeColor: Bool = false
     @State private var secondImageName: String?
     @State private var showSecondImage: Bool = false
-//    @State private var x: CGFloat?
-//    @State private var y: CGFloat?
     @State private var x: CGFloat = {
         if let screenSize = NSScreen.main?.frame.size {
             return calculateWatchPosition(parentSize: screenSize).0
@@ -51,18 +49,6 @@ struct ContentView: View {
             _y = State(initialValue: yValue)
         }
     }
-
-//    private func calculateWatchPosition(parentSize: CGSize) {
-//        var seed = UInt64(Date().timeIntervalSince1970)
-//        let seedData = Data(bytes: &seed, count: MemoryLayout<UInt64>.size)
-//        let generator = GKARC4RandomSource(seed: seedData)
-//
-//        x = CGFloat(generator.nextUniform()) * (parentSize.width * 0.8 - parentSize.width * 0.2) + parentSize.width * 0.2
-//        y = CGFloat(generator.nextUniform()) * (parentSize.height * 0.8 - parentSize.height * 0.2) + parentSize.height * 0.2
-//
-////        print("(x, y): (\(x), \(y))")
-////        watchPos)ition = CGPoint(x: x, y: y)
-//    }
 
     private func randomGentleColor() -> Color {
         let colors: [Color] = [

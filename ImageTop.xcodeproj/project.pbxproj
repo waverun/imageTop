@@ -15,6 +15,7 @@
 		923643A52A0521B600221E30 /* ImageTop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923643A32A0521B600221E30 /* ImageTop.xcdatamodeld */; };
 		92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */; };
 		92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */; };
+		92DDFA772A07DC7800056912 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA762A07DC7800056912 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		92DDFA6C2A05415100056912 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalWatchView.swift; sourceTree = "<group>"; };
 		92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppDelegate.swift; sourceTree = "<group>"; };
+		92DDFA762A07DC7800056912 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */,
+				92DDFA762A07DC7800056912 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,6 +164,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92DDFA772A07DC7800056912 /* SettingsView.swift in Sources */,
 				92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */,
 				923643A22A0521B600221E30 /* Persistence.swift in Sources */,
 				9236439B2A0521B400221E30 /* ContentView.swift in Sources */,
