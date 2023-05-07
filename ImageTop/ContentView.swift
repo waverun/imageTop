@@ -15,6 +15,8 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 }
 
 struct ContentView: View {
+//    @Environment(\.appDelegate) private var appDelegate: CustomAppDelegate
+
     @State private var imageName: String?
     @State private var timer: Timer? = nil
     @State private var inactivityDuration: TimeInterval = 10 // Set your predefined time (in seconds)
@@ -215,7 +217,12 @@ struct ContentView: View {
             
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
 //                exitApp()
-                NSApp.keyWindow?.orderOut(nil) // Hide the main window
+//                NSApp.keyWindow?.orderOut(nil) // Hide the main window
+//                appDelegate.mainWindow?.orderOut(nil)
+                if let appDelegate = NSApplication.shared.delegate as? CustomAppDelegate {
+                    appDelegate.mainWindow?.orderOut(nil)
+                }
+
                 return event
             }
         }

@@ -63,6 +63,7 @@
 		923643972A0521B400221E30 /* ImageTop */ = {
 			isa = PBXGroup;
 			children = (
+				92DDFA782A07E23F00056912 /* Extensions */,
 				92DDFA6C2A05415100056912 /* Info.plist */,
 				923643982A0521B400221E30 /* ImageTopApp.swift */,
 				92DDFA6D2A06DF2E00056912 /* Views */,
@@ -92,6 +93,13 @@
 				92DDFA762A07DC7800056912 /* SettingsView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		92DDFA782A07E23F00056912 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

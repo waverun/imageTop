@@ -2,16 +2,37 @@ import Cocoa
 import SwiftUI
 
 class CustomAppDelegate: NSObject, NSApplicationDelegate {
+    var mainWindow: NSWindow?
     var statusBarItem: NSStatusItem!
     var settingsWindow: NSWindow!
     
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Add status bar icon
+        mainWindow = NSApplication.shared.windows.first
+        if let window = mainWindow {
+            window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: true, animate: true)
+        }
+        
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusBarItem.button {
             button.image = NSImage(systemSymbolName: "display.2", accessibilityDescription: "Settings")
-            button.action = #selector(statusBarButtonClicked)
         }
+        
+        // Create the menu
+        let menu = NSMenu()
+        menu.addItem(withTitle: "Show", action: #selector(showMainWindow), keyEquivalent: "")
+        menu.addItem(withTitle: "Settings", action: #selector(openSettings), keyEquivalent: "")
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(withTitle: "Quit", action: #selector(quitApp), keyEquivalent: "q")
+        
+        // Assign the menu to the status bar item
+        statusBarItem.menu = menu
+        
+        //        // Add status bar icon
+        //        statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        //        if let button = statusBarItem.button {
+        //            button.image = NSImage(systemSymbolName: "display.2", accessibilityDescription: "Settings")
+        //            button.action = #selector(statusBarButtonClicked)
+        //        }
         
         // Initialize settings window
         settingsWindow = NSWindow(
@@ -30,7 +51,16 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @objc func statusBarButtonClicked(sender: AnyObject) {
+    @objc func showMainWindow() {
+        mainWindow?.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    }
+    
+    @objc func quitApp() {
+        NSApp.terminate(nil)
+    }
+    
+    @objc func openSettings(sender: AnyObject) {
         settingsWindow.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
