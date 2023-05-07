@@ -33,16 +33,26 @@ struct ContentView: View {
         return colors.randomElement() ?? Color.white
     }
     
+//    private func changeBackgroundColor() {
+//        imageName = nil
+//        let newColor = randomGentleColor()
+//        fadeColor = newColor
+//
+//        showFadeColor = true
+//    }
+    
     private func changeBackgroundColor() {
         imageName = nil
         let newColor = randomGentleColor()
         fadeColor = newColor
-        
-        showFadeColor = true
+
+        withAnimation(.linear(duration: 1)) {
+            showFadeColor.toggle()
+        }
     }
         
     private func setupScreenChangeTimer() {
-        imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [self] _ in
+        imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [self] _ in
             changeScreenImageOrColor()
         }
     }
@@ -133,14 +143,14 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             backgroundColor
-                .opacity(showFadeColor ? 0 : 1)
+//                .opacity(showFadeColor ? 0 : 1)
                 .edgesIgnoringSafeArea(.all)
-                .animation(.linear(duration: 1))
+//                .animation(.linear(duration: 1))
             
             fadeColor
                 .opacity(showFadeColor ? 1 : 0)
                 .edgesIgnoringSafeArea(.all)
-                .animation(.linear(duration: 1))
+//                .animation(.linear(duration: 1))
             
             if let imageName = imageName {
                 Image(nsImage: NSImage(contentsOfFile: imageName)!)
@@ -150,10 +160,20 @@ struct ContentView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onChange(of: showFadeColor) { _ in
-            withAnimation(.linear(duration: 1)) {
-                backgroundColor = backgroundColor
-                fadeColor = fadeColor
+//        .onChange(of: showFadeColor) { _ in
+//            withAnimation(.linear(duration: 1)) {
+//                backgroundColor = backgroundColor
+//                fadeColor = fadeColor
+//            }
+//        }
+        .onChange(of: showFadeColor) { newValue in
+            if newValue {
+                withAnimation(.linear(duration: 1)) {
+                    backgroundColor = fadeColor
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    showFadeColor = false
+                }
             }
         }
         .onAppear {
