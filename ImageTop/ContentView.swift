@@ -13,7 +13,9 @@ struct ContentView: View {
     @State private var imageMode = true
     @State private var fadeColor: Color = Color.clear
     @State private var showFadeColor: Bool = false
-    
+    @State private var secondImageName: String?
+    @State private var showSecondImage: Bool = false
+
     private func randomGentleColor() -> Color {
         let colors: [Color] = [
             Color(red: 0.96, green: 0.52, blue: 0.49),
@@ -32,15 +34,7 @@ struct ContentView: View {
         
         return colors.randomElement() ?? Color.white
     }
-    
-//    private func changeBackgroundColor() {
-//        imageName = nil
-//        let newColor = randomGentleColor()
-//        fadeColor = newColor
-//
-//        showFadeColor = true
-//    }
-    
+        
     private func changeBackgroundColor() {
         imageName = nil
         let newColor = randomGentleColor()
@@ -61,18 +55,29 @@ struct ContentView: View {
         _ = imageMode ? loadRandomImage() : changeBackgroundColor()
     }
     
+//    private func loadRandomImage() {
+//        print("loadRandomImage")
+//        if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
+//            imageName = "\(imageFolder)/\(randomImageName)"
+//        }
+//    }
+    
     private func loadRandomImage() {
         print("loadRandomImage")
         if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
-            imageName = "\(imageFolder)/\(randomImageName)"
+            if showSecondImage {
+                imageName = "\(imageFolder)/\(randomImageName)"
+            } else {
+                secondImageName = "\(imageFolder)/\(randomImageName)"
+            }
+            showSecondImage.toggle()
         }
     }
-    
+
     private func resetTimer() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
             DispatchQueue.main.async {
-                //                self.loadRandomImage()
                 changeScreenImageOrColor()
             }
         }
@@ -152,20 +157,37 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.all)
 //                .animation(.linear(duration: 1))
             
+//            if let imageName = imageName {
+//                Image(nsImage: NSImage(contentsOfFile: imageName)!)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .edgesIgnoringSafeArea(.all)
+//            }
+//            if let secondImageName = secondImageName {
+//                Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .edgesIgnoringSafeArea(.all)
+//            }
             if let imageName = imageName {
                 Image(nsImage: NSImage(contentsOfFile: imageName)!)
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
+                    .opacity(showSecondImage ? 0 : 1)
+                    .animation(.linear(duration: 1), value: showSecondImage)
+            }
+
+            if let secondImageName = secondImageName {
+                Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+                    .opacity(showSecondImage ? 1 : 0)
+                    .animation(.linear(duration: 1), value: showSecondImage)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .onChange(of: showFadeColor) { _ in
-//            withAnimation(.linear(duration: 1)) {
-//                backgroundColor = backgroundColor
-//                fadeColor = fadeColor
-//            }
-//        }
         .onChange(of: showFadeColor) { newValue in
             if newValue {
                 withAnimation(.linear(duration: 1)) {
@@ -177,7 +199,6 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            
             if UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") != nil {
                 startAccessingDownloadsFolder()
             } else {
@@ -188,11 +209,6 @@ struct ContentView: View {
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 exitApp()
                 return event
-                //                if imageName != nil {
-                //                    imageName = nil
-                //                }
-                //                resetTimer()
-                //                return event
             }
         }
         .onDisappear {
