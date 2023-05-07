@@ -14,6 +14,7 @@
 		923643A22A0521B600221E30 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923643A12A0521B600221E30 /* Persistence.swift */; };
 		923643A52A0521B600221E30 /* ImageTop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923643A32A0521B600221E30 /* ImageTop.xcdatamodeld */; };
 		92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */; };
+		92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		923643A62A0521B600221E30 /* ImageTop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageTop.entitlements; sourceTree = "<group>"; };
 		92DDFA6C2A05415100056912 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalWatchView.swift; sourceTree = "<group>"; };
+		92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				923643A62A0521B600221E30 /* ImageTop.entitlements */,
 				923643A32A0521B600221E30 /* ImageTop.xcdatamodeld */,
 				9236439E2A0521B600221E30 /* Preview Content */,
+				92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */,
 			);
 			path = ImageTop;
 			sourceTree = "<group>";
@@ -161,6 +164,7 @@
 				92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */,
 				923643A22A0521B600221E30 /* Persistence.swift in Sources */,
 				9236439B2A0521B400221E30 /* ContentView.swift in Sources */,
+				92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */,
 				923643992A0521B400221E30 /* ImageTopApp.swift in Sources */,
 				923643A52A0521B600221E30 /* ImageTop.xcdatamodeld in Sources */,
 			);
