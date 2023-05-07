@@ -47,7 +47,7 @@ struct SettingsView: View {
                 }
             }
         }
-        .frame(width: 235, height: 200)
+        .frame(width: 245, height: 200)
     }
     
     private func openFolderPicker() {
