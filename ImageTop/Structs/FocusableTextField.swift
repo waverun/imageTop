@@ -12,6 +12,8 @@ struct FocusableTextField: NSViewRepresentable {
         let textField = NSTextField()
         textField.delegate = context.coordinator
         textField.formatter = formatter
+        textField.isEnabled = true
+    
         return textField
     }
 

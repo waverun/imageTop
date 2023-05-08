@@ -65,6 +65,17 @@ struct SettingsView: View {
         }
         .frame(width: 245, height: 200)
         .allowsHitTesting(true) // Add this modifier
+        .onAppear {
+            DispatchQueue.main.async {
+                if let textField = NSApp.keyWindow?.firstResponder as? NSTextField {
+                    textField.becomeFirstResponder()
+                } else {
+                    if let firstTextField = NSApp.keyWindow?.contentView?.findSubview(ofType: NSTextField.self) {
+                        firstTextField.becomeFirstResponder()
+                    }
+                }
+            }
+        }
     }
     
     private func openFolderPicker() {

@@ -17,6 +17,7 @@
 		92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */; };
 		92DDFA772A07DC7800056912 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA762A07DC7800056912 /* SettingsView.swift */; };
 		92DDFA7D2A08346B00056912 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA7C2A08346B00056912 /* FocusableTextField.swift */; };
+		92E19FD42A08F1FF004DBF3B /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E19FD32A08F1FF004DBF3B /* NSView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppDelegate.swift; sourceTree = "<group>"; };
 		92DDFA762A07DC7800056912 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		92DDFA7C2A08346B00056912 /* FocusableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusableTextField.swift; sourceTree = "<group>"; };
+		92E19FD32A08F1FF004DBF3B /* NSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 		92DDFA782A07E23F00056912 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				92E19FD32A08F1FF004DBF3B /* NSView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 				9236439B2A0521B400221E30 /* ContentView.swift in Sources */,
 				92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */,
 				923643992A0521B400221E30 /* ImageTopApp.swift in Sources */,
+				92E19FD42A08F1FF004DBF3B /* NSView.swift in Sources */,
 				923643A52A0521B600221E30 /* ImageTop.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

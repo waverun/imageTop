@@ -17,13 +17,14 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 struct ContentView: View {
     let onMainWindowHide: (() -> Void)?
 
+    @State private var testText: String = ""
+
     @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
     @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
 
     @State private var imageName: String?
     @State private var timer: Timer? = nil
-//    @State private var inactivityDuration: TimeInterval = 10 // Set your predefined time (in seconds)
     @State private var imageNames: [String] = []
     @State private var imageFolder: String?
     @State private var imageOrBackgroundChangeTimer: Timer? = nil
@@ -56,6 +57,11 @@ struct ContentView: View {
             _x = State(initialValue: xValue)
             _y = State(initialValue: yValue)
         }
+    }
+    
+    private func resetImageOrBackgroundChangeTimer() {
+        imageOrBackgroundChangeTimer?.invalidate()
+        setupScreenChangeTimer()
     }
 
     private func randomGentleColor() -> Color {
@@ -189,7 +195,7 @@ struct ContentView: View {
                 fadeColor
                     .opacity(showFadeColor ? 1 : 0)
                     .edgesIgnoringSafeArea(.all)
-                
+    
                 if let imageName = imageName {
                     Image(nsImage: NSImage(contentsOfFile: imageName)!)
                         .resizable()
@@ -212,6 +218,9 @@ struct ContentView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onChange(of: replaceImageAfter) { newValue in
+            resetImageOrBackgroundChangeTimer()
+        }
         .onAppear {
             if UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") != nil {
                 startAccessingDownloadsFolder()
