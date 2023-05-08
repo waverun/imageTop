@@ -18,14 +18,13 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 struct ContentView: View {
     @NSApplicationDelegateAdaptor(CustomAppDelegate.self) var appDelegate
 
-    let hotkey = HotKey(key: .escape, modifiers: [.control, .command])
-//    let onMainWindowHide: (() -> Void)?
+    @State private var hotkey: HotKey? = HotKey(key: .escape, modifiers: [.control, .command])
 
     @State private var testText: String = ""
 
-//    @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
     @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
+    @AppStorage("hotKeyString") private var hotKeyString: String = "escape"
 
     @State private var imageName: String?
     @State private var timer: Timer? = nil
@@ -54,9 +53,6 @@ struct ContentView: View {
 
     
     init() {
-//    init(onMainWindowHide: @escaping () -> Void = {}) {
-//        self.onMainWindowHide = onMainWindowHide
-
         if let screenSize = NSScreen.main?.frame.size {
             let (xValue, yValue) = calculateWatchPosition(parentSize: screenSize)
             _x = State(initialValue: xValue)
@@ -64,6 +60,14 @@ struct ContentView: View {
         }
     }
     
+    private func updateHotKey() {
+        if let key = Key(string: hotKeyString) {
+            hotkey?.isPaused = true
+            hotkey = HotKey(key: key, modifiers: [.control, .command])
+            hotkey!.keyDownHandler = hotkeyPressed
+        }
+    }
+
     private func showApp() {
         DispatchQueue.main.async {
             appDelegate.mainWindow?.makeKeyAndOrderFront(nil)
@@ -252,7 +256,11 @@ struct ContentView: View {
                 hideApp()
                 return event
             }
-            hotkey.keyDownHandler = hotkeyPressed
+//            hotkey.keyDownHandler = hotkeyPressed
+            updateHotKey()
+        }
+        .onChange(of: hotKeyString) { _ in
+            updateHotKey()
         }
         .onDisappear {
             timer?.invalidate()
