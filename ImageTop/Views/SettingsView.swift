@@ -14,25 +14,9 @@ struct SettingsView: View {
             GeometryReader { geometry in
                 Form {
                     VStack {
-//                        HStack {
-//                            Text("Inactivity Duration")
-//                                .frame(width: geometry.size.width * 0.635, alignment: .leading)
-//                            FocusableTextField(text: Binding(get: {
-//                                String(inactivityDuration)
-//                            }, set: { newValue in
-//                                if let value = TimeInterval(newValue) {
-//                                    inactivityDuration = value
-//                                }
-//                            }), formatter: NumberFormatter())
-//
-//                                .multilineTextAlignment(.trailing)
-//                                .frame(width: 50)
-//                            Spacer()
-//                        }.padding(.leading)
                         HStack {
                             Text("Replace Image After")
                                 .frame(width: geometry.size.width * 0.635, alignment: .leading)
-//                            TextField("", value: $replaceImageAfter, formatter: NumberFormatter())
                             FocusableTextField(text: Binding(get: {
                                 String(replaceImageAfter)
                             }, set: { newValue in
