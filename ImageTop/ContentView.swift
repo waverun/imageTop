@@ -2,6 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 import AppKit
 import GameplayKit
+import HotKey
 
 private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
     var seed = UInt64(Date().timeIntervalSince1970)
@@ -15,6 +16,7 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 }
 
 struct ContentView: View {
+    let hotkey = HotKey(key: .escape, modifiers: [.control, .command])
     let onMainWindowHide: (() -> Void)?
 
     @State private var testText: String = ""
@@ -57,6 +59,10 @@ struct ContentView: View {
             _x = State(initialValue: xValue)
             _y = State(initialValue: yValue)
         }
+    }
+    
+    private func hotkeyPressed() {
+        print("hotkey pressed")
     }
     
     private func resetImageOrBackgroundChangeTimer() {
@@ -234,6 +240,7 @@ struct ContentView: View {
                 hideApp()
                 return event
             }
+            hotkey.keyDownHandler = hotkeyPressed
         }
         .onDisappear {
             timer?.invalidate()
