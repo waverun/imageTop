@@ -15,9 +15,9 @@ struct SettingsView: View {
                 Form {
                     VStack {
                         HStack {
-                            Text("Hotkey")
+                            Text("Hot key Name")
                                 .frame(width: geometry.size.width * 0.35, alignment: .leading)
-                            TextField("Key", text: $keyString)
+                            TextField("", text: $keyString)
                                 .frame(width: 120)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                             Spacer()
