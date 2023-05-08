@@ -19,6 +19,7 @@
 		92DDFA7D2A08346B00056912 /* FocusableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA7C2A08346B00056912 /* FocusableTextField.swift */; };
 		92E19FD42A08F1FF004DBF3B /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E19FD32A08F1FF004DBF3B /* NSView.swift */; };
 		92F41A742A0922CA00E24631 /* HotKey in Frameworks */ = {isa = PBXBuildFile; productRef = 92F41A732A0922CA00E24631 /* HotKey */; };
+		92F41A772A093F1100E24631 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 92F41A762A093F1100E24631 /* KeyboardShortcuts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92F41A742A0922CA00E24631 /* HotKey in Frameworks */,
+				92F41A772A093F1100E24631 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +138,7 @@
 			name = ImageTop;
 			packageProductDependencies = (
 				92F41A732A0922CA00E24631 /* HotKey */,
+				92F41A762A093F1100E24631 /* KeyboardShortcuts */,
 			);
 			productName = ImageTop;
 			productReference = 923643952A0521B400221E30 /* ImageTop.app */;
@@ -167,6 +170,7 @@
 			mainGroup = 9236438C2A0521B400221E30;
 			packageReferences = (
 				92F41A722A0922CA00E24631 /* XCRemoteSwiftPackageReference "HotKey" */,
+				92F41A752A093F1100E24631 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 			);
 			productRefGroup = 923643962A0521B400221E30 /* Products */;
 			projectDirPath = "";
@@ -414,6 +418,14 @@
 				kind = branch;
 			};
 		};
+		92F41A752A093F1100E24631 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -421,6 +433,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 92F41A722A0922CA00E24631 /* XCRemoteSwiftPackageReference "HotKey" */;
 			productName = HotKey;
+		};
+		92F41A762A093F1100E24631 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 92F41A752A093F1100E24631 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
 		};
 /* End XCSwiftPackageProductDependency section */
 

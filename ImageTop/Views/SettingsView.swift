@@ -1,4 +1,5 @@
 import SwiftUI
+import KeyboardShortcuts
 
 struct SettingsView: View {
 //    @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
@@ -14,6 +15,13 @@ struct SettingsView: View {
             GeometryReader { geometry in
                 Form {
                     VStack {
+                        HStack {
+                            Text("Hotkey")
+                                .frame(width: geometry.size.width * 0.33, alignment: .leading)
+                            KeyboardShortcuts.Recorder(for: .init("showHideApp"))
+                                .frame(width: 120)
+                            Spacer()
+                        }.padding(.leading)
                         HStack {
                             Text("Replace Image After")
                                 .frame(width: geometry.size.width * 0.635, alignment: .leading)
