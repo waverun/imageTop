@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
+//    @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
     @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
     
@@ -14,22 +14,21 @@ struct SettingsView: View {
             GeometryReader { geometry in
                 Form {
                     VStack {
-                        HStack {
-                            Text("Inactivity Duration")
-                                .frame(width: geometry.size.width * 0.635, alignment: .leading)
-//                            TextField("", value: $inactivityDuration, formatter: NumberFormatter())
-                            FocusableTextField(text: Binding(get: {
-                                String(inactivityDuration)
-                            }, set: { newValue in
-                                if let value = TimeInterval(newValue) {
-                                    inactivityDuration = value
-                                }
-                            }), formatter: NumberFormatter())
-
-                                .multilineTextAlignment(.trailing)
-                                .frame(width: 50)
-                            Spacer()
-                        }.padding(.leading)
+//                        HStack {
+//                            Text("Inactivity Duration")
+//                                .frame(width: geometry.size.width * 0.635, alignment: .leading)
+//                            FocusableTextField(text: Binding(get: {
+//                                String(inactivityDuration)
+//                            }, set: { newValue in
+//                                if let value = TimeInterval(newValue) {
+//                                    inactivityDuration = value
+//                                }
+//                            }), formatter: NumberFormatter())
+//
+//                                .multilineTextAlignment(.trailing)
+//                                .frame(width: 50)
+//                            Spacer()
+//                        }.padding(.leading)
                         HStack {
                             Text("Replace Image After")
                                 .frame(width: geometry.size.width * 0.635, alignment: .leading)

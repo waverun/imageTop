@@ -19,7 +19,7 @@ struct ContentView: View {
 
     @State private var testText: String = ""
 
-    @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
+//    @AppStorage("inactivityDuration") private var inactivityDuration: TimeInterval = 120
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
     @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
 
@@ -115,14 +115,14 @@ struct ContentView: View {
         }
     }
 
-    private func resetTimer() {
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
-            DispatchQueue.main.async {
-                changeScreenImageOrColor()
-            }
-        }
-    }
+//    private func resetTimer() {
+//        timer?.invalidate()
+//        timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
+//            DispatchQueue.main.async {
+//                changeScreenImageOrColor()
+//            }
+//        }
+//    }
     
     private func hideApp() {
         onMainWindowHide?()
@@ -227,7 +227,7 @@ struct ContentView: View {
             } else {
                 requestFolderAccess()
             }
-            resetTimer()
+//            resetTimer()
             setupScreenChangeTimer()
             
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
