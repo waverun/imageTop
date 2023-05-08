@@ -16,8 +16,10 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 }
 
 struct ContentView: View {
+    @NSApplicationDelegateAdaptor(CustomAppDelegate.self) var appDelegate
+
     let hotkey = HotKey(key: .escape, modifiers: [.control, .command])
-    let onMainWindowHide: (() -> Void)?
+//    let onMainWindowHide: (() -> Void)?
 
     @State private var testText: String = ""
 
@@ -51,8 +53,9 @@ struct ContentView: View {
     }()
 
     
-    init(onMainWindowHide: @escaping () -> Void = {}) {
-        self.onMainWindowHide = onMainWindowHide
+    init() {
+//    init(onMainWindowHide: @escaping () -> Void = {}) {
+//        self.onMainWindowHide = onMainWindowHide
 
         if let screenSize = NSScreen.main?.frame.size {
             let (xValue, yValue) = calculateWatchPosition(parentSize: screenSize)
@@ -61,8 +64,17 @@ struct ContentView: View {
         }
     }
     
+    private func showApp() {
+        DispatchQueue.main.async {
+            appDelegate.mainWindow?.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+            appDelegate.isMainWindowVisible = true
+        }
+    }
+
     private func hotkeyPressed() {
         print("hotkey pressed")
+        showApp()
     }
     
     private func resetImageOrBackgroundChangeTimer() {
@@ -120,18 +132,18 @@ struct ContentView: View {
             showSecondImage.toggle()
         }
     }
-
-//    private func resetTimer() {
-//        timer?.invalidate()
-//        timer = Timer.scheduledTimer(withTimeInterval: inactivityDuration, repeats: false) { _ in
-//            DispatchQueue.main.async {
-//                changeScreenImageOrColor()
-//            }
-//        }
+    
+//    private func hideApp() {
+//        onMainWindowHide?()
 //    }
     
     private func hideApp() {
-        onMainWindowHide?()
+        if gIgnoreHideCount > 0 {
+            gIgnoreHideCount -= 1
+            return
+        }
+        appDelegate.mainWindow?.orderOut(nil)
+        appDelegate.isMainWindowVisible = false
     }
 
     private func requestFolderAccess() {

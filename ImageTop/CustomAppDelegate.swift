@@ -3,7 +3,9 @@ import SwiftUI
 
 var gIgnoreHideCount = 0
 
-class CustomAppDelegate: NSObject, NSApplicationDelegate {
+class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+    @Published var isMainWindowVisible: Bool = true // Add this line
+
     var mainWindow: NSWindow?
     var statusBarItem: NSStatusItem!
     var settingsWindow: NSWindow!
@@ -63,10 +65,4 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate {
         NSApp.activate(ignoringOtherApps: true)
         settingsWindow.makeFirstResponder(nil)
     }
-
-//    @objc func openSettings(sender: AnyObject) {
-//        settingsWindow.makeKeyAndOrderFront(nil)
-//        NSApplication.shared.activate(ignoringOtherApps: true) // Add this lingf
-//        NSApp.activate(ignoringOtherApps: true)
-//    }
 }
