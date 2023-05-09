@@ -25,6 +25,7 @@ struct ContentView: View {
 
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
     @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
+    @AppStorage("imageTopFolderBookmark") private var imageTopFolderBookmarkData: Data?
     @AppStorage("hotKeyString") private var hotKeyString: String = "escape"
     @AppStorage("modifierKeyString1") private var keyString1: String = "command"
     @AppStorage("modifierKeyString2") private var keyString2: String = "control"
@@ -32,7 +33,7 @@ struct ContentView: View {
     @State private var imageName: String?
     @State private var timer: Timer? = nil
     @State private var imageNames: [String] = []
-    @State private var imageFolder: String?
+//    @State private var imageFolder: String?
     @State private var imageOrBackgroundChangeTimer: Timer? = nil
     @State private var backgroundColor: Color = Color.white
     @State private var imageMode = true
@@ -63,6 +64,27 @@ struct ContentView: View {
         }
     }
     
+    private func startAccessingFolder() {
+        if let bookmarkData = imageTopFolderBookmarkData {
+            do {
+                var isStale = false
+                let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
+                if isStale {
+                    print("Bookmark data is stale")
+                } else {
+                    if url.startAccessingSecurityScopedResource() {
+                        print("Successfully accessed security-scoped resource")
+                        loadImageNames()
+                    } else {
+                        print("Error accessing security-scoped resource")
+                    }
+                }
+            } catch {
+                print("Error resolving security-scoped bookmark: \(error)")
+            }
+        }
+    }
+
     private func updateHotKey() {
         if let key = Key(string: hotKeyString) {
             var modifiers: NSEvent.ModifierFlags = []
@@ -137,7 +159,8 @@ struct ContentView: View {
         
     private func loadRandomImage() {
         print("loadRandomImage")
-        if let randomImageName = imageNames.randomElement(), let imageFolder = imageFolder {
+        if let randomImageName = imageNames.randomElement() {
+            let imageFolder = selectedFolderPath
             if showSecondImage {
                 imageName = "\(imageFolder)/\(randomImageName)"
             } else {
@@ -160,61 +183,60 @@ struct ContentView: View {
         appDelegate.isMainWindowVisible = false
     }
 
-    private func requestFolderAccess() {
-        let openPanel = NSOpenPanel()
-        openPanel.title = "Select the Downloads folder"
-        openPanel.message = "Please select the Downloads folder to grant access."
-        openPanel.allowedContentTypes = [UTType.folder]
-        openPanel.allowsOtherFileTypes = false
-        openPanel.canChooseFiles = false
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = false
-        openPanel.begin { response in
-            if response == .OK, let url = openPanel.url {
-                do {
-                    let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
-                    UserDefaults.standard.set(bookmarkData, forKey: "DownloadsFolderBookmark")
-                    startAccessingDownloadsFolder()
-                } catch {
-                    print("Error creating security-scoped bookmark: \(error)")
-                }
-            }
-        }
-    }
-    
-    private func startAccessingDownloadsFolder() {
-        if let bookmarkData = UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") {
-            do {
-                var isStale = false
-                let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
-                if isStale {
-                    print("Bookmark data is stale")
-                } else {
-                    if url.startAccessingSecurityScopedResource() {
-                        imageFolder = url.path
-                        loadImageNames()
-                    } else {
-                        print("Error accessing security-scoped resource")
-                    }
-                }
-            } catch {
-                print("Error resolving security-scoped bookmark: \(error)")
-            }
-        }
-    }
+//    private func requestFolderAccess() {
+//        let openPanel = NSOpenPanel()
+//        openPanel.title = "Select the Images folder"
+//        openPanel.message = "Please select the Images folder to grant access."
+//        openPanel.allowedContentTypes = [UTType.folder]
+//        openPanel.allowsOtherFileTypes = false
+//        openPanel.canChooseFiles = false
+//        openPanel.canChooseDirectories = true
+//        openPanel.canCreateDirectories = false
+//        openPanel.begin { response in
+//            if response == .OK, let url = openPanel.url {
+//                do {
+//                    let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+//                    UserDefaults.standard.set(bookmarkData, forKey: "imageTopFolderBookmark")
+//                    startAccessingFolder()
+//                } catch {
+//                    print("Error creating security-scoped bookmark: \(error)")
+//                }
+//            }
+//        }
+//    }
+//
+//    private func startAccessingFolder() {
+//        if let bookmarkData = UserDefaults.standard.data(forKey: "imageTopFolderBookmark") {
+//            do {
+//                var isStale = false
+//                let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
+//                if isStale {
+//                    print("Bookmark data is stale")
+//                } else {
+//                    if url.startAccessingSecurityScopedResource() {
+//                        imageFolder = url.path
+//                        loadImageNames()
+//                    } else {
+//                        print("Error accessing security-scoped resource")
+//                    }
+//                }
+//            } catch {
+//                print("Error resolving security-scoped bookmark: \(error)")
+//            }
+//        }
+//    }
     
     private func loadImageNames() {
-        if let imageFolder = imageFolder {
-            let folderURL = URL(fileURLWithPath: imageFolder)
-            let fileManager = FileManager.default
-            do {
-                let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
-                imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
-                imageMode = imageNames.count >= 2
-                changeScreenImageOrColor()
-            } catch {
-                print("Error loading image names: \(error)")
-            }
+        let imageFolder = selectedFolderPath
+        let folderURL = URL(fileURLWithPath: imageFolder)
+        let fileManager = FileManager.default
+        do {
+            let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
+            imageMode = imageNames.count >= 2
+            changeScreenImageOrColor()
+        } catch {
+            print("Error loading image names: \(error)")
         }
     }
     
@@ -254,14 +276,8 @@ struct ContentView: View {
             resetImageOrBackgroundChangeTimer()
         }
         .onAppear {
-            if UserDefaults.standard.data(forKey: "DownloadsFolderBookmark") != nil {
-                startAccessingDownloadsFolder()
-            } else {
-                requestFolderAccess()
-            }
-//            resetTimer()
             setupScreenChangeTimer()
-            
+            startAccessingFolder()
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
                 hideApp()
                 return event
@@ -278,10 +294,13 @@ struct ContentView: View {
         .onChange(of: keyString2) { _ in
             updateHotKey()
         }
+        .onChange(of: selectedFolderPath) { _ in
+            startAccessingFolder()
+        }
         .onDisappear {
             timer?.invalidate()
             imageOrBackgroundChangeTimer?.invalidate()
-            if let url = URL(string: imageFolder ?? "") {
+            if let url = URL(string: selectedFolderPath) {
                 url.stopAccessingSecurityScopedResource()
             }
         }

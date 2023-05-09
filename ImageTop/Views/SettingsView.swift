@@ -1,12 +1,16 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
-    @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
+    @AppStorage("selectedFolderPath") private var storedFolderPath: String = ""
+    @AppStorage("imageTopFolderBookmark") private var imageTopFolderBookmarkData: Data?
     @AppStorage("hotKeyString") private var keyString: String = "Escape"
     @AppStorage("modifierKeyString1") private var keyString1: String = "command"
     @AppStorage("modifierKeyString2") private var keyString2: String = "control"
 
+    @State private var selectedFolderPath = ""
+    
     private let allKeyNames = Keyboard.keyNames
     private let modKeyNames = Keyboard.modKeyNames
 
@@ -122,7 +126,6 @@ struct SettingsView: View {
                             }
                             Spacer()
                         }.padding(.leading)
-                        
                         Text(selectedFolderPath)
                             .foregroundColor(.gray)
                             .lineLimit(1)
@@ -132,17 +135,43 @@ struct SettingsView: View {
             }
         }
         .frame(width: 350, height: 250)
+        .onAppear {
+            selectedFolderPath = storedFolderPath
+        }
     }
+    
+//    private func openFolderPicker() {
+//        let openPanel = NSOpenPanel()
+//        openPanel.canChooseFiles = false
+//        openPanel.canChooseDirectories = true
+//        openPanel.allowsMultipleSelection = false
+//
+//        openPanel.begin { result in
+//            if result == .OK {
+//                selectedFolderPath = openPanel.urls[0].path
+//                storedFolderPath = selectedFolderPath
+//            }
+//        }
+//    }
     
     private func openFolderPicker() {
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
         openPanel.canChooseDirectories = true
         openPanel.allowsMultipleSelection = false
-        
+        openPanel.allowedContentTypes = [UTType.folder]
+        openPanel.allowsOtherFileTypes = false
+
         openPanel.begin { result in
-            if result == .OK {
-                selectedFolderPath = openPanel.urls[0].path
+            if result == .OK, let url = openPanel.url {
+                do {
+                    let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
+                    imageTopFolderBookmarkData = bookmarkData
+                    selectedFolderPath = url.path
+                    storedFolderPath = selectedFolderPath
+                } catch {
+                    print("Error creating security-scoped bookmark: \(error)")
+                }
             }
         }
     }
