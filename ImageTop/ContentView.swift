@@ -3,6 +3,7 @@ import UniformTypeIdentifiers
 import AppKit
 import GameplayKit
 import HotKey
+//import KeyboardShortcuts
 
 private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
     var seed = UInt64(Date().timeIntervalSince1970)
@@ -25,6 +26,8 @@ struct ContentView: View {
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
     @AppStorage("selectedFolderPath") private var selectedFolderPath: String = ""
     @AppStorage("hotKeyString") private var hotKeyString: String = "escape"
+    @AppStorage("modifierKeyString1") private var keyString1: String = "command"
+    @AppStorage("modifierKeyString2") private var keyString2: String = "control"
 
     @State private var imageName: String?
     @State private var timer: Timer? = nil
@@ -62,8 +65,15 @@ struct ContentView: View {
     
     private func updateHotKey() {
         if let key = Key(string: hotKeyString) {
+            var modifiers: NSEvent.ModifierFlags = []
+            if let modifier = Keyboard.stringToModifier(keyString1) {
+                modifiers.insert(modifier)
+            }
+            if let modifier = Keyboard.stringToModifier(keyString2) {
+                modifiers.insert(modifier)
+            }
             hotkey?.isPaused = true
-            hotkey = HotKey(key: key, modifiers: [.control, .command])
+            hotkey = HotKey(key: key, modifiers: modifiers)
             hotkey!.keyDownHandler = hotkeyPressed
         }
     }
@@ -260,6 +270,12 @@ struct ContentView: View {
             updateHotKey()
         }
         .onChange(of: hotKeyString) { _ in
+            updateHotKey()
+        }
+        .onChange(of: keyString1) { _ in
+            updateHotKey()
+        }
+        .onChange(of: keyString2) { _ in
             updateHotKey()
         }
         .onDisappear {

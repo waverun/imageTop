@@ -23,6 +23,7 @@
 		92F41A792A0953CD00E24631 /* KeyRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A782A0953CD00E24631 /* KeyRecorder.swift */; };
 		92F41A7C2A0954B400E24631 /* KeyRecorderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A7B2A0954B400E24631 /* KeyRecorderTextField.swift */; };
 		92F41A7F2A0978B900E24631 /* KeyRecorderTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A7E2A0978B900E24631 /* KeyRecorderTextFieldDelegate.swift */; };
+		92F41A832A0A44D900E24631 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A822A0A44D900E24631 /* KeyboardShortcuts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		92F41A782A0953CD00E24631 /* KeyRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRecorder.swift; sourceTree = "<group>"; };
 		92F41A7B2A0954B400E24631 /* KeyRecorderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRecorderTextField.swift; sourceTree = "<group>"; };
 		92F41A7E2A0978B900E24631 /* KeyRecorderTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRecorderTextFieldDelegate.swift; sourceTree = "<group>"; };
+		92F41A822A0A44D900E24631 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				92E19FD32A08F1FF004DBF3B /* NSView.swift */,
+				92F41A822A0A44D900E24631 /* KeyboardShortcuts.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 				923643A22A0521B600221E30 /* Persistence.swift in Sources */,
 				9236439B2A0521B400221E30 /* ContentView.swift in Sources */,
 				92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */,
+				92F41A832A0A44D900E24631 /* KeyboardShortcuts.swift in Sources */,
 				92F41A7C2A0954B400E24631 /* KeyRecorderTextField.swift in Sources */,
 				923643992A0521B400221E30 /* ImageTopApp.swift in Sources */,
 				92E19FD42A08F1FF004DBF3B /* NSView.swift in Sources */,
