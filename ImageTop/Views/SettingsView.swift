@@ -2,6 +2,8 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
+    @EnvironmentObject var appDelegate: CustomAppDelegate
+
     @AppStorage("replaceImageAfter") private var replaceImageAfter: TimeInterval = 10
     @AppStorage("selectedFolderPath") private var storedFolderPath: String = ""
     @AppStorage("imageTopFolderBookmark") private var imageTopFolderBookmarkData: Data?
@@ -130,6 +132,8 @@ struct SettingsView: View {
     }
         
     private func openFolderPicker() {
+        appDelegate.settingsWindow.level = .normal
+
         let openPanel = NSOpenPanel()
         openPanel.canChooseFiles = false
         openPanel.canChooseDirectories = true
@@ -138,6 +142,8 @@ struct SettingsView: View {
         openPanel.allowsOtherFileTypes = false
 
         openPanel.begin { result in
+            appDelegate.settingsWindow.level = .floating
+
             if result == .OK, let url = openPanel.url {
                 do {
                     let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)

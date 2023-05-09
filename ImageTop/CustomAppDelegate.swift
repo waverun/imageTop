@@ -38,7 +38,8 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             backing: .buffered,
             defer: false
         )
-        settingsWindow.contentView = NSHostingView(rootView: SettingsView())
+//        settingsWindow.contentView = NSHostingView(rootView: SettingsView())
+        settingsWindow.contentView = NSHostingView(rootView: SettingsView().environmentObject(self))
         settingsWindow.title = "Settings"
         settingsWindow.level = .floating
         settingsWindow.center()
