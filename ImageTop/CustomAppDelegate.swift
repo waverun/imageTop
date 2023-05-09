@@ -42,7 +42,8 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         settingsWindow.title = "Settings"
         settingsWindow.level = .floating
         settingsWindow.center()
-        
+        settingsWindow.isReleasedWhenClosed = false // Add this line
+
         // Maximize the main window
         if let window = NSApplication.shared.windows.first {
             window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: true, animate: true)
