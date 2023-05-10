@@ -10,15 +10,8 @@ struct ImageTopApp: App {
 
         WindowGroup {
             ContentView(
-//                onMainWindowHide: {
-//                if gIgnoreHideCount > 0 {
-//                    gIgnoreHideCount -= 1
-//                    return
-//                }
-//                appDelegate.mainWindow?.orderOut(nil)
-//                print("d1: onMainWindowHide")
-//            }
             )
+            .environmentObject(appDelegate) // Add this line
             .environment(\.managedObjectContext, persistenceController.container.viewContext)
             .background(WindowAccessor { window in
                 appDelegate.mainWindow = window

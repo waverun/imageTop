@@ -17,6 +17,8 @@ private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
 }
 
 struct ContentView: View {
+    @EnvironmentObject var customAppDelegate: CustomAppDelegate
+
     @NSApplicationDelegateAdaptor(CustomAppDelegate.self) var appDelegate
 
     @State private var hotkey: HotKey? = HotKey(key: .escape, modifiers: [.control, .command])
@@ -101,6 +103,7 @@ struct ContentView: View {
     }
 
     private func showApp() {
+        setupScreenChangeTimer()
         DispatchQueue.main.async {
             appDelegate.mainWindow?.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
@@ -148,8 +151,10 @@ struct ContentView: View {
     }
         
     private func setupScreenChangeTimer() {
-        imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: replaceImageAfter, repeats: true) { [self] _ in
-            changeScreenImageOrColor()
+        if imageOrBackgroundChangeTimer == nil {
+            imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: replaceImageAfter, repeats: true) { [self] _ in
+                changeScreenImageOrColor()
+            }
         }
     }
     
@@ -169,11 +174,7 @@ struct ContentView: View {
             showSecondImage.toggle()
         }
     }
-    
-//    private func hideApp() {
-//        onMainWindowHide?()
-//    }
-    
+        
     private func hideApp() {
         if gIgnoreHideCount > 0 {
             gIgnoreHideCount -= 1
@@ -181,50 +182,9 @@ struct ContentView: View {
         }
         appDelegate.mainWindow?.orderOut(nil)
         appDelegate.isMainWindowVisible = false
+        imageOrBackgroundChangeTimer?.invalidate()
+        imageOrBackgroundChangeTimer = nil
     }
-
-//    private func requestFolderAccess() {
-//        let openPanel = NSOpenPanel()
-//        openPanel.title = "Select the Images folder"
-//        openPanel.message = "Please select the Images folder to grant access."
-//        openPanel.allowedContentTypes = [UTType.folder]
-//        openPanel.allowsOtherFileTypes = false
-//        openPanel.canChooseFiles = false
-//        openPanel.canChooseDirectories = true
-//        openPanel.canCreateDirectories = false
-//        openPanel.begin { response in
-//            if response == .OK, let url = openPanel.url {
-//                do {
-//                    let bookmarkData = try url.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
-//                    UserDefaults.standard.set(bookmarkData, forKey: "imageTopFolderBookmark")
-//                    startAccessingFolder()
-//                } catch {
-//                    print("Error creating security-scoped bookmark: \(error)")
-//                }
-//            }
-//        }
-//    }
-//
-//    private func startAccessingFolder() {
-//        if let bookmarkData = UserDefaults.standard.data(forKey: "imageTopFolderBookmark") {
-//            do {
-//                var isStale = false
-//                let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
-//                if isStale {
-//                    print("Bookmark data is stale")
-//                } else {
-//                    if url.startAccessingSecurityScopedResource() {
-//                        imageFolder = url.path
-//                        loadImageNames()
-//                    } else {
-//                        print("Error accessing security-scoped resource")
-//                    }
-//                }
-//            } catch {
-//                print("Error resolving security-scoped bookmark: \(error)")
-//            }
-//        }
-//    }
     
     private func loadImageNames() {
         let imageFolder = selectedFolderPath
@@ -304,5 +264,9 @@ struct ContentView: View {
                 url.stopAccessingSecurityScopedResource()
             }
         }
+        .onReceive(customAppDelegate.$showWindow, perform: { _ in
+            setupScreenChangeTimer()
+        })
+
     }
 }

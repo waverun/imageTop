@@ -5,6 +5,7 @@ var gIgnoreHideCount = 0
 
 class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @Published var isMainWindowVisible: Bool = true // Add this line
+    @Published var showWindow: Bool = false // Add this line
 
     var mainWindow: NSWindow?
     var statusBarItem: NSStatusItem!
@@ -55,7 +56,7 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         mainWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         gIgnoreHideCount = 2
-        
+        showWindow.toggle() // To cause start of change timer in customView
         // Close the settings window
         settingsWindow.orderOut(nil)
     }
