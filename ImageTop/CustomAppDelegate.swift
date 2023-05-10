@@ -55,7 +55,9 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         mainWindow?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         gIgnoreHideCount = 2
-        print("d1: showMainWindow")
+        
+        // Close the settings window
+        settingsWindow.orderOut(nil)
     }
     
     @objc func quitApp() {
