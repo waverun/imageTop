@@ -238,7 +238,6 @@ struct ContentView: View {
     }
     
     private func loadImageNames() {
-//        return
         let imageFolder = selectedFolderPath
         let folderURL = URL(fileURLWithPath: imageFolder)
         let fileManager = FileManager.default

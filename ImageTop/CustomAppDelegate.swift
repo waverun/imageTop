@@ -68,7 +68,7 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWi
 //        gIgnoreHideCount = 2
         showWindow.toggle() // To cause start of change timer in customView
 //        // Close the settings window
-//        settingsWindow.orderOut(nil)
+        settingsWindow.orderOut(nil)
         NSWindow.setFullScreen()
     }
     
