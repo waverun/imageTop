@@ -37,7 +37,7 @@ struct ContentView: View {
     @State private var imageNames: [String] = []
 //    @State private var imageFolder: String?
     @State private var imageOrBackgroundChangeTimer: Timer? = nil
-    @State private var backgroundColor: Color = Color.white
+    @State private var backgroundColor: Color = Color.clear
     @State private var imageMode = true
     @State private var fadeColor: Color = Color.clear
     @State private var showFadeColor: Bool = false
@@ -246,6 +246,7 @@ struct ContentView: View {
         let imageFolder = selectedFolderPath
         let folderURL = URL(fileURLWithPath: imageFolder)
         let fileManager = FileManager.default
+        imageMode = false
         do {
             let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
             imageNames = []
