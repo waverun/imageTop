@@ -137,19 +137,42 @@ struct ContentView: View {
             Color(red: 0.45, green: 0.74, blue: 0.98),
             Color(red: 0.78, green: 0.45, blue: 0.98)
         ]
-        
         return colors.randomElement() ?? Color.white
     }
         
     private func changeBackgroundColor() {
         imageName = nil
-        let newColor = randomGentleColor()
-        fadeColor = newColor
-
+        var newColor: Color? = nil
+        
+        repeat {
+            newColor = randomGentleColor()
+        } while newColor == backgroundColor && !showFadeColor
+                || newColor == fadeColor && showFadeColor
+        
+        if showFadeColor {
+            backgroundColor = newColor!
+        } else {
+            fadeColor = newColor!
+        }
         withAnimation(.linear(duration: 1)) {
             showFadeColor.toggle()
+            print("backgroundColor: \(backgroundColor) fadeColor: \(fadeColor)")
         }
     }
+    
+//    private func changeBackgroundColor() {
+//        imageName = nil
+//        let newColor = randomGentleColor()
+//        if showFadeColor {
+//            backgroundColor = newColor
+//        } else {
+//            fadeColor = newColor
+//        }
+//        withAnimation(.linear(duration: 1)) {
+//            showFadeColor.toggle()
+//            print("backgroundColor: \(backgroundColor) fadeColor: \(fadeColor)")
+//        }
+//    }
         
     private func setupScreenChangeTimer() {
         if imageOrBackgroundChangeTimer == nil {
@@ -165,6 +188,7 @@ struct ContentView: View {
         
     private func loadRandomImage() {
         print("loadRandomImage")
+//        return
         var newRandomImageName: String? = nil
         repeat {
             newRandomImageName = imageNames.randomElement()
@@ -214,12 +238,14 @@ struct ContentView: View {
     }
     
     private func loadImageNames() {
+//        return
         let imageFolder = selectedFolderPath
         let folderURL = URL(fileURLWithPath: imageFolder)
         let fileManager = FileManager.default
         do {
             let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
             imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
+            print("imageNames: \(imageNames)")
             imageMode = imageNames.count >= 2
             changeScreenImageOrColor()
         } catch {
@@ -232,7 +258,7 @@ struct ContentView: View {
             ZStack {
                 backgroundColor
                     .edgesIgnoringSafeArea(.all)
-                
+                    .opacity(showFadeColor ? 0 : 1)
                 fadeColor
                     .opacity(showFadeColor ? 1 : 0)
                     .edgesIgnoringSafeArea(.all)
