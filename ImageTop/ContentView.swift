@@ -205,7 +205,7 @@ struct ContentView: View {
             } else {
                 secondImageName = "\(imageFolder)/\(randomImageName)"
             }
-            print("imageName: \(imageName) secondImageName: \(secondImageName)")
+//            print("imageName: \(imageName) secondImageName: \(secondImageName)")
             showSecondImage.toggle()
         }
     }
