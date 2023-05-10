@@ -119,6 +119,7 @@ struct ContentView: View {
     
     private func resetImageOrBackgroundChangeTimer() {
         imageOrBackgroundChangeTimer?.invalidate()
+        imageOrBackgroundChangeTimer = nil
         setupScreenChangeTimer()
     }
 
@@ -176,6 +177,7 @@ struct ContentView: View {
         
     private func setupScreenChangeTimer() {
         if imageOrBackgroundChangeTimer == nil {
+            print("setupScreenChangeTime")
             imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: replaceImageAfter, repeats: true) { [self] _ in
                 changeScreenImageOrColor()
             }
@@ -183,6 +185,7 @@ struct ContentView: View {
     }
     
     private func changeScreenImageOrColor() {
+        print("changeScreenImageOrColor")
         _ = imageMode ? loadRandomImage() : changeBackgroundColor()
     }
         
@@ -202,6 +205,7 @@ struct ContentView: View {
             } else {
                 secondImageName = "\(imageFolder)/\(randomImageName)"
             }
+            print("imageName: \(imageName) secondImageName: \(secondImageName)")
             showSecondImage.toggle()
         }
     }
@@ -238,11 +242,13 @@ struct ContentView: View {
     }
     
     private func loadImageNames() {
+        print("loadImageNames")
         let imageFolder = selectedFolderPath
         let folderURL = URL(fileURLWithPath: imageFolder)
         let fileManager = FileManager.default
         do {
             let contents = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            imageNames = []
             imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
             print("imageNames: \(imageNames)")
             imageMode = imageNames.count >= 2
@@ -253,6 +259,36 @@ struct ContentView: View {
     }
     
     var body: some View {
+//        GeometryReader { geometry in
+//            ZStack {
+//                backgroundColor
+//                    .edgesIgnoringSafeArea(.all)
+//                    .opacity(showFadeColor ? 0 : 1)
+//                fadeColor
+//                    .opacity(showFadeColor ? 1 : 0)
+//                    .edgesIgnoringSafeArea(.all)
+//
+//                if let imageName = imageName {
+//                    Image(nsImage: NSImage(contentsOfFile: imageName)!)
+//                        .resizable()
+//                        .scaledToFill()
+//                        .edgesIgnoringSafeArea(.all)
+//                        .opacity(showSecondImage ? 0 : 1)
+//                        .animation(.linear(duration: 1), value: showSecondImage)
+//                }
+//
+//                if let secondImageName = secondImageName {
+//                    Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
+//                        .resizable()
+//                        .scaledToFill()
+//                        .edgesIgnoringSafeArea(.all)
+//                        .opacity(showSecondImage ? 1 : 0)
+//                        .animation(.linear(duration: 1), value: showSecondImage)
+//                }
+//
+//                DigitalWatchView(x: x, y: y)
+//            }
+//        }
         GeometryReader { geometry in
             ZStack {
                 backgroundColor
@@ -261,25 +297,19 @@ struct ContentView: View {
                 fadeColor
                     .opacity(showFadeColor ? 1 : 0)
                     .edgesIgnoringSafeArea(.all)
-    
+
                 if let imageName = imageName {
-                    Image(nsImage: NSImage(contentsOfFile: imageName)!)
-                        .resizable()
-                        .scaledToFill()
-                        .edgesIgnoringSafeArea(.all)
+                    LoadableImage(imagePath: imageName, onError: loadImageNames)
                         .opacity(showSecondImage ? 0 : 1)
                         .animation(.linear(duration: 1), value: showSecondImage)
                 }
-                
+
                 if let secondImageName = secondImageName {
-                    Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
-                        .resizable()
-                        .scaledToFill()
-                        .edgesIgnoringSafeArea(.all)
+                    LoadableImage(imagePath: secondImageName, onError: loadImageNames)
                         .opacity(showSecondImage ? 1 : 0)
                         .animation(.linear(duration: 1), value: showSecondImage)
                 }
-                
+
                 DigitalWatchView(x: x, y: y)
             }
         }

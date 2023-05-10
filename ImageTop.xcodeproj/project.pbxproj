@@ -13,6 +13,7 @@
 		923643A02A0521B600221E30 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9236439F2A0521B600221E30 /* Preview Assets.xcassets */; };
 		923643A22A0521B600221E30 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923643A12A0521B600221E30 /* Persistence.swift */; };
 		923643A52A0521B600221E30 /* ImageTop.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 923643A32A0521B600221E30 /* ImageTop.xcdatamodeld */; };
+		926A932E2A0BF4D900F6B8A0 /* LoadableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926A932D2A0BF4D900F6B8A0 /* LoadableImageView.swift */; };
 		92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */; };
 		92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */; };
 		92DDFA772A07DC7800056912 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DDFA762A07DC7800056912 /* SettingsView.swift */; };
@@ -36,6 +37,7 @@
 		923643A12A0521B600221E30 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		923643A42A0521B600221E30 /* ImageTop.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ImageTop.xcdatamodel; sourceTree = "<group>"; };
 		923643A62A0521B600221E30 /* ImageTop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageTop.entitlements; sourceTree = "<group>"; };
+		926A932D2A0BF4D900F6B8A0 /* LoadableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableImageView.swift; sourceTree = "<group>"; };
 		92DDFA6C2A05415100056912 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		92DDFA6E2A06DF4E00056912 /* DigitalWatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DigitalWatchView.swift; sourceTree = "<group>"; };
 		92DDFA702A07BC5600056912 /* CustomAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAppDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				92DDFA7C2A08346B00056912 /* FocusableTextField.swift */,
 				92F41A782A0953CD00E24631 /* KeyRecorder.swift */,
+				926A932D2A0BF4D900F6B8A0 /* LoadableImageView.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				92DDFA712A07BC5600056912 /* CustomAppDelegate.swift in Sources */,
 				92F41A832A0A44D900E24631 /* KeyboardShortcuts.swift in Sources */,
 				92F41A7C2A0954B400E24631 /* KeyRecorderTextField.swift in Sources */,
+				926A932E2A0BF4D900F6B8A0 /* LoadableImageView.swift in Sources */,
 				923643992A0521B400221E30 /* ImageTopApp.swift in Sources */,
 				92E19FD42A08F1FF004DBF3B /* NSView.swift in Sources */,
 				923643A52A0521B600221E30 /* ImageTop.xcdatamodeld in Sources */,
