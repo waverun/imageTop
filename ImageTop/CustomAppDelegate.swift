@@ -18,7 +18,7 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusBarItem.button {
-            button.image = NSImage(systemSymbolName: "display.2", accessibilityDescription: "Settings")
+            button.image = NSImage(named: "imageTop-16")
         }
         
         // Create the menu
