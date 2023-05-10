@@ -165,7 +165,13 @@ struct ContentView: View {
         
     private func loadRandomImage() {
         print("loadRandomImage")
-        if let randomImageName = imageNames.randomElement() {
+        var newRandomImageName: String? = nil
+        repeat {
+            newRandomImageName = imageNames.randomElement()
+        } while newRandomImageName == imageName && showSecondImage
+          || newRandomImageName == secondImageName && !showSecondImage
+        
+        if let randomImageName = newRandomImageName {
             let imageFolder = selectedFolderPath
             if showSecondImage {
                 imageName = "\(imageFolder)/\(randomImageName)"
@@ -175,6 +181,19 @@ struct ContentView: View {
             showSecondImage.toggle()
         }
     }
+
+//    private func loadRandomImage() {
+//        print("loadRandomImage")
+//        if let randomImageName = imageNames.randomElement() {
+//            let imageFolder = selectedFolderPath
+//            if showSecondImage {
+//                imageName = "\(imageFolder)/\(randomImageName)"
+//            } else {
+//                secondImageName = "\(imageFolder)/\(randomImageName)"
+//            }
+//            showSecondImage.toggle()
+//        }
+//    }
         
     private func hideApp() {
         NSWindow.exitFullScreen()
