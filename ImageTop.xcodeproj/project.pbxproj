@@ -24,6 +24,7 @@
 		92F41A7C2A0954B400E24631 /* KeyRecorderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A7B2A0954B400E24631 /* KeyRecorderTextField.swift */; };
 		92F41A7F2A0978B900E24631 /* KeyRecorderTextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A7E2A0978B900E24631 /* KeyRecorderTextFieldDelegate.swift */; };
 		92F41A832A0A44D900E24631 /* KeyboardShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A822A0A44D900E24631 /* KeyboardShortcuts.swift */; };
+		92F41A852A0BAD9D00E24631 /* NSWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F41A842A0BAD9D00E24631 /* NSWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		92F41A7B2A0954B400E24631 /* KeyRecorderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRecorderTextField.swift; sourceTree = "<group>"; };
 		92F41A7E2A0978B900E24631 /* KeyRecorderTextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyRecorderTextFieldDelegate.swift; sourceTree = "<group>"; };
 		92F41A822A0A44D900E24631 /* KeyboardShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardShortcuts.swift; sourceTree = "<group>"; };
+		92F41A842A0BAD9D00E24631 /* NSWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 			children = (
 				92E19FD32A08F1FF004DBF3B /* NSView.swift */,
 				92F41A822A0A44D900E24631 /* KeyboardShortcuts.swift */,
+				92F41A842A0BAD9D00E24631 /* NSWindow.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -228,6 +231,7 @@
 			files = (
 				92F41A7F2A0978B900E24631 /* KeyRecorderTextFieldDelegate.swift in Sources */,
 				92DDFA7D2A08346B00056912 /* FocusableTextField.swift in Sources */,
+				92F41A852A0BAD9D00E24631 /* NSWindow.swift in Sources */,
 				92DDFA772A07DC7800056912 /* SettingsView.swift in Sources */,
 				92DDFA6F2A06DF4E00056912 /* DigitalWatchView.swift in Sources */,
 				92F41A792A0953CD00E24631 /* KeyRecorder.swift in Sources */,

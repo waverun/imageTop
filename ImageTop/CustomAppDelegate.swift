@@ -3,7 +3,7 @@ import SwiftUI
 
 var gIgnoreHideCount = 0
 
-class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWindowDelegate {
     @Published var isMainWindowVisible: Bool = true // Add this line
     @Published var showWindow: Bool = false // Add this line
 
@@ -11,6 +11,15 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     var statusBarItem: NSStatusItem!
     var settingsWindow: NSWindow!
     
+    func windowDidExitFullScreen(_ notification: Notification) {
+        if let window = notification.object as? NSWindow, window == mainWindow {
+            DispatchQueue.main.async {
+                self.mainWindow?.orderOut(nil)
+                self.isMainWindowVisible = false
+            }
+        }
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         mainWindow = NSApplication.shared.windows.first
         if let window = mainWindow {
@@ -47,9 +56,10 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         settingsWindow.isReleasedWhenClosed = false // Add this line
 
         // Maximize the main window
-        if let window = NSApplication.shared.windows.first {
-            window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: true, animate: true)
-        }
+//        if let window = NSApplication.shared.windows.first {
+//            window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: true, animate: true)
+            NSWindow.setFullScreen()
+//        }
     }
 
     @objc func showMainWindow() {
@@ -59,6 +69,7 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         showWindow.toggle() // To cause start of change timer in customView
         // Close the settings window
         settingsWindow.orderOut(nil)
+        NSWindow.setFullScreen()
     }
     
     @objc func quitApp() {

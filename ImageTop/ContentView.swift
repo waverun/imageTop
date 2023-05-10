@@ -108,6 +108,7 @@ struct ContentView: View {
             appDelegate.mainWindow?.makeKeyAndOrderFront(nil)
             NSApp.activate(ignoringOtherApps: true)
             appDelegate.isMainWindowVisible = true
+            NSWindow.setFullScreen()
         }
     }
 
@@ -176,14 +177,20 @@ struct ContentView: View {
     }
         
     private func hideApp() {
+        if imageOrBackgroundChangeTimer == nil {
+            return
+        }
+        print("hideApp")
         if gIgnoreHideCount > 0 {
             gIgnoreHideCount -= 1
             return
         }
-        appDelegate.mainWindow?.orderOut(nil)
-        appDelegate.isMainWindowVisible = false
+//        appDelegate.mainWindow?.orderOut(nil)
+//        appDelegate.isMainWindowVisible = false
         imageOrBackgroundChangeTimer?.invalidate()
         imageOrBackgroundChangeTimer = nil
+        
+        NSWindow.exitFullScreen()
     }
     
     private func loadImageNames() {

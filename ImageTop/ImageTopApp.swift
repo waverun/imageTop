@@ -15,6 +15,7 @@ struct ImageTopApp: App {
             .environment(\.managedObjectContext, persistenceController.container.viewContext)
             .background(WindowAccessor { window in
                 appDelegate.mainWindow = window
+                window.delegate = appDelegate // Set the delegate
             })
         }
     }
