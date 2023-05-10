@@ -253,10 +253,13 @@ struct ContentView: View {
             imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
             print("imageNames: \(imageNames)")
             imageMode = imageNames.count >= 2
-            changeScreenImageOrColor()
+            DispatchQueue.main.async {
+                changeScreenImageOrColor()
+            }
         } catch {
             print("Error loading image names: \(error)")
         }
+        resetImageOrBackgroundChangeTimer() // From some reason, after the mode is changed due to 1 image left, the time is not working
     }
     
     var body: some View {
