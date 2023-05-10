@@ -18,6 +18,7 @@ struct ImageTopApp: App {
                 window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: false, animate: false) // Set initial frame
             })
         }
+        .windowStyle(HiddenTitleBarWindowStyle())
     }
 }
 
