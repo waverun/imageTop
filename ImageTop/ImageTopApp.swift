@@ -16,6 +16,7 @@ struct ImageTopApp: App {
             .background(WindowAccessor { window in
                 appDelegate.mainWindow = window
                 window.delegate = appDelegate // Set the delegate
+                window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: false, animate: false) // Set initial frame
             })
         }
     }

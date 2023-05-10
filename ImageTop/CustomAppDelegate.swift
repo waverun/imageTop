@@ -20,6 +20,16 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWi
         }
     }
 
+//    func windowDidEnterFullScreen(_ notification: Notification) {
+//        if let window = notification.object as? NSWindow, window == mainWindow {
+//            DispatchQueue.main.async {
+//                self.mainWindow?.makeKeyAndOrderFront(nil)
+//                NSApp.activate(ignoringOtherApps: true)
+//                self.isMainWindowVisible = true
+//            }
+//        }
+//    }
+    
     func applicationDidFinishLaunching(_ notification: Notification) {
         mainWindow = NSApplication.shared.windows.first
         if let window = mainWindow {
@@ -63,12 +73,12 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWi
     }
 
     @objc func showMainWindow() {
-        mainWindow?.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
-        gIgnoreHideCount = 2
-        showWindow.toggle() // To cause start of change timer in customView
-        // Close the settings window
-        settingsWindow.orderOut(nil)
+//        mainWindow?.makeKeyAndOrderFront(nil)
+//        NSApp.activate(ignoringOtherApps: true)
+//        gIgnoreHideCount = 2
+//        showWindow.toggle() // To cause start of change timer in customView
+//        // Close the settings window
+//        settingsWindow.orderOut(nil)
         NSWindow.setFullScreen()
     }
     

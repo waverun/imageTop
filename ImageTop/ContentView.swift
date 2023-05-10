@@ -104,12 +104,12 @@ struct ContentView: View {
 
     private func showApp() {
         setupScreenChangeTimer()
-        DispatchQueue.main.async {
-            appDelegate.mainWindow?.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
-            appDelegate.isMainWindowVisible = true
+//        DispatchQueue.main.async {
+//            NSApp.activate(ignoringOtherApps: true)
+//            appDelegate.isMainWindowVisible = true
+//            appDelegate.mainWindow?.center()
             NSWindow.setFullScreen()
-        }
+//        }
     }
 
     private func hotkeyPressed() {
@@ -177,6 +177,8 @@ struct ContentView: View {
     }
         
     private func hideApp() {
+        NSWindow.exitFullScreen()
+
         if imageOrBackgroundChangeTimer == nil {
             return
         }
@@ -189,8 +191,7 @@ struct ContentView: View {
 //        appDelegate.isMainWindowVisible = false
         imageOrBackgroundChangeTimer?.invalidate()
         imageOrBackgroundChangeTimer = nil
-        
-        NSWindow.exitFullScreen()
+    
     }
     
     private func loadImageNames() {
