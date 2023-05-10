@@ -9,8 +9,7 @@ struct ImageTopApp: App {
         @NSApplicationDelegateAdaptor(CustomAppDelegate.self) var appDelegate
 
         WindowGroup {
-            ContentView(
-            )
+            ContentView()
             .environmentObject(appDelegate) // Add this line
             .environment(\.managedObjectContext, persistenceController.container.viewContext)
             .background(WindowAccessor { window in

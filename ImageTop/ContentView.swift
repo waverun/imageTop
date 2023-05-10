@@ -322,6 +322,7 @@ struct ContentView: View {
             resetImageOrBackgroundChangeTimer()
         }
         .onAppear {
+            backgroundColor = randomGentleColor()
             setupScreenChangeTimer()
             startAccessingFolder()
             NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .mouseMoved]) { event in
@@ -353,6 +354,5 @@ struct ContentView: View {
         .onReceive(customAppDelegate.$showWindow, perform: { _ in
             setupScreenChangeTimer()
         })
-
     }
 }
