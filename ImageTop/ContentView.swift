@@ -3,7 +3,6 @@ import UniformTypeIdentifiers
 import AppKit
 import GameplayKit
 import HotKey
-//import KeyboardShortcuts
 
 private func calculateWatchPosition(parentSize: CGSize) -> (CGFloat, CGFloat) {
     var seed = UInt64(Date().timeIntervalSince1970)
@@ -35,7 +34,6 @@ struct ContentView: View {
     @State private var imageName: String?
     @State private var timer: Timer? = nil
     @State private var imageNames: [String] = []
-//    @State private var imageFolder: String?
     @State private var imageOrBackgroundChangeTimer: Timer? = nil
     @State private var backgroundColor: Color = Color.clear
     @State private var imageMode = true
@@ -103,13 +101,8 @@ struct ContentView: View {
     }
 
     private func showApp() {
+        NSWindow.setFullScreen()
         setupScreenChangeTimer()
-//        DispatchQueue.main.async {
-//            NSApp.activate(ignoringOtherApps: true)
-//            appDelegate.isMainWindowVisible = true
-//            appDelegate.mainWindow?.center()
-            NSWindow.setFullScreen()
-//        }
     }
 
     private func hotkeyPressed() {
@@ -143,6 +136,8 @@ struct ContentView: View {
         
     private func changeBackgroundColor() {
         imageName = nil
+        secondImageName = nil
+        
         var newColor: Color? = nil
         
         repeat {
@@ -160,30 +155,20 @@ struct ContentView: View {
             print("backgroundColor: \(backgroundColor) fadeColor: \(fadeColor)")
         }
     }
-    
-//    private func changeBackgroundColor() {
-//        imageName = nil
-//        let newColor = randomGentleColor()
-//        if showFadeColor {
-//            backgroundColor = newColor
-//        } else {
-//            fadeColor = newColor
-//        }
-//        withAnimation(.linear(duration: 1)) {
-//            showFadeColor.toggle()
-//            print("backgroundColor: \(backgroundColor) fadeColor: \(fadeColor)")
-//        }
-//    }
-        
+                
     private func setupScreenChangeTimer() {
-        if imageOrBackgroundChangeTimer == nil {
-            print("setupScreenChangeTime")
-            imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: replaceImageAfter, repeats: true) { [self] _ in
-                changeScreenImageOrColor()
-            }
+        if imageOrBackgroundChangeTimer != nil {
+            print("invalidate existing timer")
+            imageOrBackgroundChangeTimer?.invalidate()
+            imageOrBackgroundChangeTimer = nil
+        }
+
+        print("setupScreenChangeTimer")
+        imageOrBackgroundChangeTimer = Timer.scheduledTimer(withTimeInterval: replaceImageAfter, repeats: true) { [self] _ in
+            changeScreenImageOrColor()
         }
     }
-    
+
     private func changeScreenImageOrColor() {
         print("changeScreenImageOrColor")
         _ = imageMode ? loadRandomImage() : changeBackgroundColor()
@@ -191,37 +176,24 @@ struct ContentView: View {
         
     private func loadRandomImage() {
         print("loadRandomImage")
-//        return
         var newRandomImageName: String? = nil
+        let imageFolder = selectedFolderPath
+        var newRandomImagePath = ""
         repeat {
             newRandomImageName = imageNames.randomElement()
-        } while newRandomImageName == imageName && showSecondImage
-          || newRandomImageName == secondImageName && !showSecondImage
+            newRandomImagePath = "\(imageFolder)/\(newRandomImageName!)"
+        } while (newRandomImagePath == imageName && !showSecondImage)
+          || (newRandomImagePath == secondImageName && showSecondImage)
         
         if let randomImageName = newRandomImageName {
-            let imageFolder = selectedFolderPath
             if showSecondImage {
                 imageName = "\(imageFolder)/\(randomImageName)"
             } else {
                 secondImageName = "\(imageFolder)/\(randomImageName)"
             }
-//            print("imageName: \(imageName) secondImageName: \(secondImageName)")
             showSecondImage.toggle()
         }
     }
-
-//    private func loadRandomImage() {
-//        print("loadRandomImage")
-//        if let randomImageName = imageNames.randomElement() {
-//            let imageFolder = selectedFolderPath
-//            if showSecondImage {
-//                imageName = "\(imageFolder)/\(randomImageName)"
-//            } else {
-//                secondImageName = "\(imageFolder)/\(randomImageName)"
-//            }
-//            showSecondImage.toggle()
-//        }
-//    }
         
     private func hideApp() {
         NSWindow.exitFullScreen()
@@ -234,11 +206,7 @@ struct ContentView: View {
             gIgnoreHideCount -= 1
             return
         }
-//        appDelegate.mainWindow?.orderOut(nil)
-//        appDelegate.isMainWindowVisible = false
         imageOrBackgroundChangeTimer?.invalidate()
-        imageOrBackgroundChangeTimer = nil
-    
     }
     
     private func loadImageNames() {
@@ -259,40 +227,10 @@ struct ContentView: View {
         } catch {
             print("Error loading image names: \(error)")
         }
-        resetImageOrBackgroundChangeTimer() // From some reason, after the mode is changed due to 1 image left, the time is not working
+        resetImageOrBackgroundChangeTimer()
     }
     
     var body: some View {
-//        GeometryReader { geometry in
-//            ZStack {
-//                backgroundColor
-//                    .edgesIgnoringSafeArea(.all)
-//                    .opacity(showFadeColor ? 0 : 1)
-//                fadeColor
-//                    .opacity(showFadeColor ? 1 : 0)
-//                    .edgesIgnoringSafeArea(.all)
-//
-//                if let imageName = imageName {
-//                    Image(nsImage: NSImage(contentsOfFile: imageName)!)
-//                        .resizable()
-//                        .scaledToFill()
-//                        .edgesIgnoringSafeArea(.all)
-//                        .opacity(showSecondImage ? 0 : 1)
-//                        .animation(.linear(duration: 1), value: showSecondImage)
-//                }
-//
-//                if let secondImageName = secondImageName {
-//                    Image(nsImage: NSImage(contentsOfFile: secondImageName)!)
-//                        .resizable()
-//                        .scaledToFill()
-//                        .edgesIgnoringSafeArea(.all)
-//                        .opacity(showSecondImage ? 1 : 0)
-//                        .animation(.linear(duration: 1), value: showSecondImage)
-//                }
-//
-//                DigitalWatchView(x: x, y: y)
-//            }
-//        }
         GeometryReader { geometry in
             ZStack {
                 backgroundColor
@@ -329,7 +267,6 @@ struct ContentView: View {
                 hideApp()
                 return event
             }
-//            hotkey.keyDownHandler = hotkeyPressed
             updateHotKey()
         }
         .onChange(of: hotKeyString) { _ in
@@ -352,7 +289,9 @@ struct ContentView: View {
             }
         }
         .onReceive(customAppDelegate.$showWindow, perform: { _ in
-            setupScreenChangeTimer()
+//            DispatchQueue.main.async {
+            showApp()
+//            }
         })
     }
 }

@@ -48,28 +48,18 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWi
             backing: .buffered,
             defer: false
         )
-//        settingsWindow.contentView = NSHostingView(rootView: SettingsView())
         settingsWindow.contentView = NSHostingView(rootView: SettingsView().environmentObject(self))
         settingsWindow.title = "Settings"
         settingsWindow.level = .floating
         settingsWindow.center()
         settingsWindow.isReleasedWhenClosed = false // Add this line
 
-        // Maximize the main window
-//        if let window = NSApplication.shared.windows.first {
-//            window.setFrame(NSScreen.main?.frame ?? NSRect.zero, display: true, animate: true)
-            NSWindow.setFullScreen()
-//        }
+        NSWindow.setFullScreen()
     }
 
     @objc func showMainWindow() {
-//        mainWindow?.makeKeyAndOrderFront(nil)
-//        NSApp.activate(ignoringOtherApps: true)
-//        gIgnoreHideCount = 2
-        showWindow.toggle() // To cause start of change timer in customView
-//        // Close the settings window
+        showWindow.toggle() // To cause to call showApp.
         settingsWindow.orderOut(nil)
-        NSWindow.setFullScreen()
     }
     
     @objc func quitApp() {

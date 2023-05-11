@@ -150,6 +150,7 @@ struct SettingsView: View {
                     imageTopFolderBookmarkData = bookmarkData
                     selectedFolderPath = url.path
                     storedFolderPath = selectedFolderPath
+//                    appDelegate.cont
                 } catch {
                     print("Error creating security-scoped bookmark: \(error)")
                 }
