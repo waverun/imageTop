@@ -20,7 +20,9 @@ struct LoadableImage: View {
             if let nsImage = loadImage(), !imageLoadError {
                 Image(nsImage: nsImage)
                     .resizable()
-                    .scaledToFill()
+//                    .aspectRatio(contentMode: .fill)
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                    .clipped()
                     .edgesIgnoringSafeArea(.all)
             } else {
                 Color.clear
