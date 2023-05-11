@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct DigitalWatchView: View {
-    let backgroundColor = Color.black.opacity(0.8)
+    let backgroundColor = Color.black.opacity(0.6)
     let timeFont = Font.system(size: 80, weight: .bold, design: .rounded)
     @State private var watchPosition = CGPoint(x: 0, y: 0)
     @State private var timeString = ""
