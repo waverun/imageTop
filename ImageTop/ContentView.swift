@@ -227,7 +227,7 @@ struct ContentView: View {
         } catch {
             print("Error loading image names: \(error)")
         }
-        resetImageOrBackgroundChangeTimer()
+//        resetImageOrBackgroundChangeTimer()
     }
     
     var body: some View {
