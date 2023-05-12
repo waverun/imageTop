@@ -7,6 +7,7 @@ var gIgnoreHideCount = 0
 class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWindowDelegate {
     @Published var isMainWindowVisible: Bool = true // Add this line
     @Published var showWindow: Bool = false // Add this line
+    @Published var startTimer: Bool = false // Add this line
 
     var mainWindow: NSWindow?
     var statusBarItem: NSStatusItem!
@@ -19,6 +20,11 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWi
                 self.isMainWindowVisible = false
             }
         }
+    }
+    
+    func windowDidEnterFullScreen(_ notification: Notification) {
+        print("windowDidEnterFullScreen")
+        startTimer.toggle()
     }
     
     func applicationDidFinishLaunching(_ notification: Notification) {

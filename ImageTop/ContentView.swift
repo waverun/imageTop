@@ -102,7 +102,7 @@ struct ContentView: View {
 
     private func showApp() {
         NSWindow.setFullScreen()
-        setupScreenChangeTimer()
+//        setupScreenChangeTimer()
     }
 
     private func hotkeyPressed() {
@@ -221,9 +221,13 @@ struct ContentView: View {
             imageNames = contents.compactMap { $0.pathExtension.lowercased() == "jpg" || $0.pathExtension.lowercased() == "png" ? $0.lastPathComponent : nil }
             print("imageNames: \(imageNames)")
             imageMode = imageNames.count >= 2
-            DispatchQueue.main.async {
-                changeScreenImageOrColor()
+            if !imageMode {
+                imageName = nil
+                secondImageName = nil
             }
+//            DispatchQueue.main.async {
+//                changeScreenImageOrColor()
+//            }
         } catch {
             print("Error loading image names: \(error)")
         }
@@ -293,6 +297,9 @@ struct ContentView: View {
 //            DispatchQueue.main.async {
             showApp()
 //            }
+        })
+        .onReceive(customAppDelegate.$startTimer, perform: { _ in
+            setupScreenChangeTimer()
         })
     }
 }
