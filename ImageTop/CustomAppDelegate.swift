@@ -1,5 +1,6 @@
 import Cocoa
 import SwiftUI
+import ServiceManagement
 
 var gIgnoreHideCount = 0
 
@@ -36,6 +37,7 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWi
         menu.addItem(withTitle: "Show", action: #selector(showMainWindow), keyEquivalent: "")
         menu.addItem(withTitle: "Settings", action: #selector(openSettings), keyEquivalent: "")
         menu.addItem(NSMenuItem.separator())
+        menu.addItem(withTitle: "Start at login", action: #selector(openLoginItemsPreferences), keyEquivalent: "")
         menu.addItem(withTitle: "Quit", action: #selector(quitApp), keyEquivalent: "q")
         
         // Assign the menu to the status bar item
@@ -55,6 +57,12 @@ class CustomAppDelegate: NSObject, NSApplicationDelegate, ObservableObject, NSWi
         settingsWindow.isReleasedWhenClosed = false // Add this line
 
         NSWindow.setFullScreen()
+    }
+
+    @objc func openLoginItemsPreferences() {
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     @objc func showMainWindow() {

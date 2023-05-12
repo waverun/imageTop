@@ -227,6 +227,7 @@ struct ContentView: View {
         } catch {
             print("Error loading image names: \(error)")
         }
+//        Causes to timer not working after removeing image from folder and starting from menu:
 //        resetImageOrBackgroundChangeTimer()
     }
     
